@@ -157,12 +157,15 @@ npm run lint
 
 ## Deployment
 
-The app is ready to deploy to Vercel:
+The app is ready to deploy to Vercel. See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
 
+Quick steps:
 1. Push code to GitHub
 2. Import project in Vercel
 3. Add environment variables in Vercel dashboard
 4. Deploy
+
+**Note:** Build is tested and successful. The app is production-ready.
 
 ## Environment Variables
 
