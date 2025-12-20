@@ -32,30 +32,30 @@
 ## Phase 2: Authentication & User Management
 
 ### 2.1 Authentication System
-- [ ] Set up authentication library (NextAuth.js recommended)
-- [ ] Implement user registration
-- [ ] Implement user login
-- [ ] Implement logout functionality
-- [ ] Add password hashing (bcrypt)
-- [ ] Create session management
+- [x] Set up authentication library (NextAuth.js recommended)
+- [x] Implement user registration
+- [x] Implement user login
+- [x] Implement logout functionality
+- [x] Add password hashing (bcrypt)
+- [x] Create session management
 
 ### 2.2 User Models & API
-- [ ] Create User schema (customer)
-  - [ ] Include fields: name, email, phone, optional address
-  - [ ] Support for quick customer creation (minimal fields)
-- [ ] Create Barber schema (extends user with barber-specific fields)
-- [ ] Create user registration API endpoint
-- [ ] Create user login API endpoint
-- [ ] Create user profile API endpoints (GET, UPDATE)
-- [ ] Create user search/lookup API endpoint (for barbers to find customers)
-- [ ] Implement role-based access control (customer vs barber)
+- [x] Create User schema (customer)
+  - [x] Include fields: name, email, phone, optional address
+  - [x] Support for quick customer creation (minimal fields)
+- [x] Create Barber schema (extends user with barber-specific fields)
+- [x] Create user registration API endpoint
+- [x] Create user login API endpoint
+- [x] Create user profile API endpoints (GET, UPDATE)
+- [x] Create user search/lookup API endpoint (for barbers to find customers)
+- [x] Implement role-based access control (customer vs barber)
 
 ### 2.3 User Interface - Auth Pages
-- [ ] Create registration page
-- [ ] Create login page
+- [x] Create registration page
+- [x] Create login page
 - [ ] Create forgot password page (optional for MVP)
-- [ ] Create protected route middleware
-- [ ] Add authentication state management (Context API or Zustand)
+- [x] Create protected route middleware
+- [x] Add authentication state management (Context API or Zustand)
 
 ## Phase 3: Barber Profile Management
 
