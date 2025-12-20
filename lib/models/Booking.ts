@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import { Booking } from "@/lib/types";
 
-const BookingSchema = new Schema<Booking>(
+const BookingSchema = new Schema(
   {
     customerId: {
       type: Schema.Types.ObjectId,

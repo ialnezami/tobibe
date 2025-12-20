@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import { Service } from "@/lib/types";
 
-const ServiceSchema = new Schema<Service>(
+const ServiceSchema = new Schema(
   {
     barberId: {
       type: Schema.Types.ObjectId,

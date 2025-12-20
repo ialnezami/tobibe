@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import { TimeSlot } from "@/lib/types";
 
-const TimeSlotSchema = new Schema<TimeSlot>(
+const TimeSlotSchema = new Schema(
   {
     barberId: {
       type: Schema.Types.ObjectId,

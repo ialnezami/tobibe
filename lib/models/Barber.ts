@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
 import { Barber, WorkingHours } from "@/lib/types";
 
-const WorkingHoursSchema = new Schema<WorkingHours>(
+const WorkingHoursSchema = new Schema(
   {
     open: String,
     close: String,
@@ -10,7 +10,7 @@ const WorkingHoursSchema = new Schema<WorkingHours>(
   { _id: false }
 );
 
-const BarberSchema = new Schema<Barber>(
+const BarberSchema = new Schema(
   {
     name: {
       type: String,
