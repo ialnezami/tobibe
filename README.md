@@ -34,7 +34,9 @@ npm install
 Create a `.env.local` file in the root directory:
 ```env
 DATABASE_URL=your_mongodb_connection_string
-# or MONGODB_URI=your_mongodb_connection_string (both are supported)
+# or MONGODB_URI=your_mongodb_connection_string
+# Or use DATABASE_URL instead:
+# DATABASE_URL=your_mongodb_connection_string (both are supported)
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_nextauth_secret_here
 NODE_ENV=development
