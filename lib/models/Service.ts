@@ -1,0 +1,42 @@
+import mongoose, { Schema, model, models } from "mongoose";
+import { Service } from "@/lib/types";
+
+const ServiceSchema = new Schema<Service>(
+  {
+    barberId: {
+      type: Schema.Types.ObjectId,
+      ref: "Barber",
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    duration: {
+      type: Number,
+      required: true,
+      default: 10, // default 10 minutes
+      min: 1,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+export default models.Service || model<Service>("Service", ServiceSchema);
+
