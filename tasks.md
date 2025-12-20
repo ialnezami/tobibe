@@ -60,56 +60,56 @@
 ## Phase 3: Barber Profile Management
 
 ### 3.1 Barber Registration
-- [ ] Create barber registration flow
-- [ ] Add barber-specific fields (location, description, photos)
-- [ ] Create barber registration API endpoint
+- [x] Create barber registration flow
+- [x] Add barber-specific fields (location, description, photos)
+- [x] Create barber registration API endpoint
 - [ ] Implement barber profile creation UI
 
 ### 3.2 Barber Profile Management
 - [ ] Create barber profile page
 - [ ] Create barber profile edit page
-- [ ] Implement profile update API
+- [x] Implement profile update API
 - [ ] Add photo upload functionality
 - [ ] Create working hours configuration UI
 
 ### 3.3 Service Management (Barber Side)
-- [ ] Create Service schema
-- [ ] Create service CRUD API endpoints
+- [x] Create Service schema
+- [x] Create service CRUD API endpoints
 - [ ] Create service management UI (list, add, edit, delete)
-- [ ] Implement service pricing configuration
-- [ ] Add service duration settings (default: 10 minutes)
-- [ ] Implement enable/disable service functionality
+- [x] Implement service pricing configuration
+- [x] Add service duration settings (default: 10 minutes)
+- [x] Implement enable/disable service functionality
 
 ## Phase 4: Availability & Time Slot Management
 
 ### 4.1 Time Slot System
-- [ ] Create TimeSlot schema
-- [ ] Design time slot data structure (30-minute slots)
-- [ ] Create time slot generation logic
-- [ ] Implement availability checking algorithm
-- [ ] Create time slot conflict detection
+- [x] Create TimeSlot schema
+- [x] Design time slot data structure (30-minute slots)
+- [x] Create time slot generation logic
+- [x] Implement availability checking algorithm
+- [x] Create time slot conflict detection
 
 ### 4.2 Barber Availability Management
-- [ ] Create default working hours configuration
+- [x] Create default working hours configuration
 - [ ] Implement custom schedule override
-- [ ] Create slot blocking functionality
+- [x] Create slot blocking functionality
 - [ ] Create availability management UI
 - [ ] Build calendar view for barbers
-- [ ] Create API endpoints for availability management
+- [x] Create API endpoints for availability management
 
 ### 4.3 Booking Logic
-- [ ] Create Booking schema
-  - [ ] Include booking source field (self-service, barber-assisted)
-  - [ ] Link to user/customer (required)
-  - [ ] Link to barber (required)
-  - [ ] Include selected services array
-  - [ ] Include booking time and date
-- [ ] Implement booking creation logic
-- [ ] Add service combination logic (total time calculation)
-- [ ] Create booking validation (prevent double bookings)
-- [ ] Implement booking status management
-- [ ] Create booking API endpoints (CREATE, READ, UPDATE, DELETE)
-- [ ] Support booking creation by barbers on behalf of customers
+- [x] Create Booking schema
+  - [x] Include booking source field (self-service, barber-assisted)
+  - [x] Link to user/customer (required)
+  - [x] Link to barber (required)
+  - [x] Include selected services array
+  - [x] Include booking time and date
+- [x] Implement booking creation logic
+- [x] Add service combination logic (total time calculation)
+- [x] Create booking validation (prevent double bookings)
+- [x] Implement booking status management
+- [x] Create booking API endpoints (CREATE, READ, UPDATE, DELETE)
+- [x] Support booking creation by barbers on behalf of customers
 
 ## Phase 5: Customer Features - Barber Discovery
 
