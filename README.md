@@ -194,6 +194,7 @@ Quick steps:
 - `NEXTAUTH_SECRET` - Secret for NextAuth.js (generate with `openssl rand -base64 32`)
 - `NODE_ENV` - Environment (development/production)
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` - Optional: Google Maps API key for map view
+- `SEED_SECRET_TOKEN` - Optional: Secret token to protect the `/api/seed` endpoint in production
 
 ## License
 

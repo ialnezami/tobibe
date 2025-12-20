@@ -64,8 +64,42 @@ npm run build
 npm start
 ```
 
+## Database Seeding
+
+After deployment, seed the database with sample barbers:
+
+### Option 1: Using API Endpoint (Recommended)
+
+1. Visit your deployed app's seed endpoint:
+   ```
+   https://your-app.vercel.app/api/seed
+   ```
+
+2. Or use curl:
+   ```bash
+   curl -X POST https://your-app.vercel.app/api/seed
+   ```
+
+3. If you set `SEED_SECRET_TOKEN` environment variable:
+   ```bash
+   curl -X POST https://your-app.vercel.app/api/seed \
+     -H "Authorization: Bearer YOUR_SEED_SECRET_TOKEN"
+   ```
+
+The endpoint will:
+- Check if barbers already exist
+- Only seed if database is empty
+- Return status message
+
+### Option 2: Automatic Seeding (via Vercel Build Command)
+
+You can add this to your `vercel.json` or use Vercel's build command to automatically seed after deployment.
+
+**Note:** The seed script is idempotent - it won't duplicate data if barbers already exist.
+
 ## Post-Deployment Checklist
 
+- [ ] Seed database with sample barbers (visit `/api/seed` or use curl)
 - [ ] Test registration flow
 - [ ] Test login flow
 - [ ] Test barber profile creation

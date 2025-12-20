@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/db/connect";
 import Barber from "@/lib/models/Barber";
 import Service from "@/lib/models/Service";
 import User from "@/lib/models/User";
+import bcrypt from "bcryptjs";
 
 const sampleBarbers = [
   {
@@ -164,23 +164,36 @@ const sampleBarbers = [
   },
 ];
 
-async function seedBarbers() {
+export async function POST(request: NextRequest) {
   try {
-    console.log("Connecting to database...");
+    // Optional: Add a secret token for security (recommended for production)
+    const authHeader = request.headers.get("authorization");
+    const secretToken = process.env.SEED_SECRET_TOKEN;
+    
+    if (secretToken && authHeader !== `Bearer ${secretToken}`) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     await connectDB();
 
     // Check if barbers already exist
     const existingBarberCount = await Barber.countDocuments({ role: "barber" });
     if (existingBarberCount > 0) {
-      console.log(`✅ ${existingBarberCount} barbers already exist. Skipping seed.`);
-      process.exit(0);
+      return NextResponse.json(
+        {
+          message: `Database already seeded. ${existingBarberCount} barbers exist.`,
+          barberCount: existingBarberCount,
+        },
+        { status: 200 }
+      );
     }
 
-    console.log("No barbers found. Seeding database...");
+    let createdCount = 0;
 
     for (const barberData of sampleBarbers) {
-      console.log(`Creating barber: ${barberData.name}...`);
-
       // Check if user exists
       const existingUser = await User.findOne({ email: barberData.email });
       if (existingUser) {
@@ -209,17 +222,27 @@ async function seedBarbers() {
         await service.save();
       }
 
-      console.log(`✅ Created ${barberData.name} with ${barberData.services.length} services`);
+      createdCount++;
     }
 
-    console.log("\n✅ Seed completed successfully!");
-    console.log(`Created ${sampleBarbers.length} barbers with their services.`);
-    process.exit(0);
-  } catch (error) {
-    console.error("❌ Error seeding barbers:", error);
-    process.exit(1);
+    return NextResponse.json(
+      {
+        message: `Successfully seeded ${createdCount} barbers with their services.`,
+        barberCount: createdCount,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Seed error:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
-seedBarbers();
+// Also allow GET for easy triggering via browser
+export async function GET(request: NextRequest) {
+  return POST(request);
+}
 
