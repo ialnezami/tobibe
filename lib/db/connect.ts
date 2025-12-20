@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 function getMongoUri(): string {
-  const MONGODB_URI = process.env.MONGODB_URI || "";
+  // Support both DATABASE_URL and MONGODB_URI for flexibility
+  const MONGODB_URI = process.env.DATABASE_URL || process.env.MONGODB_URI || "";
   if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable inside .env");
+    throw new Error("Please define the DATABASE_URL or MONGODB_URI environment variable inside .env");
   }
   return MONGODB_URI;
 }

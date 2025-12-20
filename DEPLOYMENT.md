@@ -24,7 +24,8 @@ git push origin main
 In the Vercel project settings, add these environment variables:
 
 ```
-MONGODB_URI=your_mongodb_atlas_connection_string
+DATABASE_URL=your_mongodb_atlas_connection_string
+# or MONGODB_URI=your_mongodb_atlas_connection_string (both are supported)
 NEXTAUTH_URL=https://your-app.vercel.app
 NEXTAUTH_SECRET=your_generated_secret_here
 NODE_ENV=production

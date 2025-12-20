@@ -33,7 +33,8 @@ npm install
 3. Set up environment variables:
 Create a `.env.local` file in the root directory:
 ```env
-MONGODB_URI=your_mongodb_connection_string
+DATABASE_URL=your_mongodb_connection_string
+# or MONGODB_URI=your_mongodb_connection_string (both are supported)
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_nextauth_secret_here
 NODE_ENV=development
@@ -169,7 +170,7 @@ Quick steps:
 
 ## Environment Variables
 
-- `MONGODB_URI` - MongoDB connection string
+- `DATABASE_URL` or `MONGODB_URI` - MongoDB connection string (DATABASE_URL takes precedence)
 - `NEXTAUTH_URL` - Application URL (e.g., http://localhost:3000)
 - `NEXTAUTH_SECRET` - Secret for NextAuth.js (generate with `openssl rand -base64 32`)
 - `NODE_ENV` - Environment (development/production)
