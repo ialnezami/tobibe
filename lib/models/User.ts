@@ -24,6 +24,10 @@ const UserSchema = new Schema<User>(
       type: String,
       trim: true,
     },
+    password: {
+      type: String,
+      required: false, // Optional for quick customer creation
+    },
     role: {
       type: String,
       enum: ["customer", "barber"],
