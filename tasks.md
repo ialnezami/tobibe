@@ -15,6 +15,7 @@
 - [x] Create database connection utilities
 - [x] Set up environment variables configuration
 - [x] Create database schema models (User, Barber, Service, Booking, TimeSlot)
+- [x] Create database seed script for sample barbers
 
 ### 1.3 Deployment Setup
 - [x] Create Vercel project (ready - vercel.json configured)
@@ -114,40 +115,40 @@
 ## Phase 5: Customer Features - Barber Discovery
 
 ### 5.1 Barber List View
-- [ ] Create barber list page
-- [ ] Display barber cards with key information
-- [ ] Implement search functionality
+- [x] Create barber list page
+- [x] Display barber cards with key information
+- [x] Implement search functionality
 - [ ] Add filter options (location, rating, services)
 - [ ] Create pagination or infinite scroll
 - [ ] Add sorting options
 
 ### 5.2 Map Integration
-- [ ] Set up map library (Google Maps API or Mapbox)
-- [ ] Create map view page
-- [ ] Display barbers as markers on map
-- [ ] Implement marker click to show barber info
+- [x] Set up map library (Google Maps API or Mapbox)
+- [x] Create map view page
+- [x] Display barbers as markers on map
+- [x] Implement marker click to show barber info
 - [ ] Add geolocation for user's current location
-- [ ] Create toggle between map and list view
-- [ ] Handle map API keys and configuration
+- [x] Create toggle between map and list view
+- [x] Handle map API keys and configuration
 
 ### 5.3 Barber Detail Page
-- [ ] Create barber detail/profile page
-- [ ] Display barber information (name, photos, description, location)
-- [ ] Show available services with prices
-- [ ] Display working hours
-- [ ] Show available time slots
-- [ ] Add "Book Appointment" CTA
+- [x] Create barber detail/profile page
+- [x] Display barber information (name, photos, description, location)
+- [x] Show available services with prices
+- [x] Display working hours
+- [x] Show available time slots
+- [x] Add "Book Appointment" CTA
 
 ## Phase 6: Booking System
 
 ### 6.1 Booking Flow
-- [ ] Create booking page/component
-- [ ] Display available time slots for selected barber
-- [ ] Implement service selection UI (checkboxes with duration)
-- [ ] Calculate total booking time based on selected services
-- [ ] Show booking summary
-- [ ] Implement booking confirmation
-- [ ] Create booking success page
+- [x] Create booking page/component
+- [x] Display available time slots for selected barber
+- [x] Implement service selection UI (checkboxes with duration)
+- [x] Calculate total booking time based on selected services
+- [x] Show booking summary
+- [x] Implement booking confirmation
+- [x] Create booking success page
 
 ### 6.2 Booking Management (Customer)
 - [ ] Create "My Bookings" page
