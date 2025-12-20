@@ -63,11 +63,11 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { status } = body;
+    const { status, payment } = body;
 
-    if (!status) {
+    if (!status && !payment) {
       return NextResponse.json(
-        { error: "Status is required" },
+        { error: "Status or payment information is required" },
         { status: 400 }
       );
     }
@@ -99,7 +99,25 @@ export async function PUT(
       );
     }
 
-    booking.status = status;
+    if (status) {
+      booking.status = status;
+    }
+
+    // Update payment information (barbers only)
+    if (payment && isBarber) {
+      if (payment.method) {
+        booking.payment = booking.payment || { amount: 0, method: "pending", status: "pending" };
+        booking.payment.method = payment.method;
+      }
+      if (payment.status) {
+        booking.payment = booking.payment || { amount: 0, method: "pending", status: "pending" };
+        booking.payment.status = payment.status;
+        if (payment.status === "paid") {
+          booking.payment.paidAt = new Date();
+        }
+      }
+    }
+
     await booking.save();
 
     // Update time slot availability if cancelled

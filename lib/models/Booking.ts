@@ -42,6 +42,25 @@ const BookingSchema = new Schema<Booking>(
       enum: ["self-service", "barber-assisted"],
       required: true,
     },
+    payment: {
+      amount: {
+        type: Number,
+        default: 0,
+      },
+      method: {
+        type: String,
+        enum: ["cash", "online", "pending"],
+        default: "pending",
+      },
+      status: {
+        type: String,
+        enum: ["pending", "paid", "refunded"],
+        default: "pending",
+      },
+      paidAt: {
+        type: Date,
+      },
+    },
   },
   {
     timestamps: true,

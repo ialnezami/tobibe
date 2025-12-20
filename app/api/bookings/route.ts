@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
-    // Fetch services to calculate total duration
+    // Fetch services to calculate total duration and price
     const services = await Service.find({ _id: { $in: serviceIds } });
     if (services.length !== serviceIds.length) {
       return NextResponse.json(
@@ -121,6 +121,7 @@ export async function POST(request: NextRequest) {
     const totalDuration = calculateBookingDuration(
       services.map((s) => s.duration)
     );
+    const totalPrice = services.reduce((sum, service) => sum + service.price, 0);
 
     // Calculate end time
     const [startHour, startMin] = startTime.split(":").map(Number);
@@ -149,7 +150,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create booking
+    // Create booking with payment info
     const booking = new Booking({
       customerId: finalCustomerId,
       barberId,
@@ -159,6 +160,11 @@ export async function POST(request: NextRequest) {
       endTime,
       status: "pending",
       source: session.user.role === "barber" ? "barber-assisted" : "self-service",
+      payment: {
+        amount: totalPrice,
+        method: "pending",
+        status: "pending",
+      },
     });
 
     await booking.save();

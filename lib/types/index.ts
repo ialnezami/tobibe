@@ -66,6 +66,12 @@ export interface Booking {
   endTime: string;
   status: "pending" | "confirmed" | "cancelled" | "completed";
   source: "self-service" | "barber-assisted";
+  payment?: {
+    amount: number;
+    method: "cash" | "online" | "pending";
+    status: "pending" | "paid" | "refunded";
+    paidAt?: Date;
+  };
   createdAt?: Date;
   updatedAt?: Date;
 }
