@@ -8,9 +8,10 @@ import TimeSlot from "@/lib/models/TimeSlot";
 // GET a single booking
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -19,7 +20,7 @@ export async function GET(
 
     await connectDB();
 
-    const booking = await Booking.findById(params.id)
+    const booking = await Booking.findById(id)
       .populate("customerId", "name email phone")
       .populate("barberId", "name email phone")
       .populate("serviceIds", "name price duration");
@@ -53,9 +54,10 @@ export async function GET(
 // UPDATE a booking (mainly status updates)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -74,7 +76,7 @@ export async function PUT(
 
     await connectDB();
 
-    const booking = await Booking.findById(params.id);
+    const booking = await Booking.findById(id);
 
     if (!booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
@@ -123,12 +125,12 @@ export async function PUT(
     // Update time slot availability if cancelled
     if (status === "cancelled") {
       await TimeSlot.updateOne(
-        { bookingId: params.id },
+        { bookingId: id },
         { isAvailable: true, bookingId: null }
       );
     }
 
-    const updatedBooking = await Booking.findById(params.id)
+    const updatedBooking = await Booking.findById(id)
       .populate("customerId", "name email phone")
       .populate("barberId", "name email phone")
       .populate("serviceIds", "name price duration");
@@ -149,9 +151,10 @@ export async function PUT(
 // DELETE a booking (cancellation)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -160,7 +163,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const booking = await Booking.findById(params.id);
+    const booking = await Booking.findById(id);
 
     if (!booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
@@ -180,11 +183,11 @@ export async function DELETE(
 
     // Update time slot
     await TimeSlot.updateOne(
-      { bookingId: params.id },
+      { bookingId: id },
       { isAvailable: true, bookingId: null }
     );
 
-    await Booking.findByIdAndDelete(params.id);
+    await Booking.findByIdAndDelete(id);
 
     return NextResponse.json(
       { message: "Booking cancelled successfully" },

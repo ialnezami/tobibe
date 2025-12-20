@@ -7,12 +7,13 @@ import Service from "@/lib/models/Service";
 // GET a single service
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await connectDB();
 
-    const service = await Service.findById(params.id);
+    const service = await Service.findById(id);
 
     if (!service) {
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
@@ -31,9 +32,10 @@ export async function GET(
 // UPDATE a service
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -52,7 +54,7 @@ export async function PUT(
 
     await connectDB();
 
-    const service = await Service.findById(params.id);
+    const service = await Service.findById(id);
 
     if (!service) {
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
@@ -90,9 +92,10 @@ export async function PUT(
 // DELETE a service
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user?.id) {
@@ -108,7 +111,7 @@ export async function DELETE(
 
     await connectDB();
 
-    const service = await Service.findById(params.id);
+    const service = await Service.findById(id);
 
     if (!service) {
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
@@ -122,7 +125,7 @@ export async function DELETE(
       );
     }
 
-    await Service.findByIdAndDelete(params.id);
+    await Service.findByIdAndDelete(id);
 
     return NextResponse.json(
       { message: "Service deleted successfully" },

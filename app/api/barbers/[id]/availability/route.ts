@@ -6,9 +6,10 @@ import { generateTimeSlots } from "@/lib/utils/timeSlots";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const searchParams = request.nextUrl.searchParams;
     const dateParam = searchParams.get("date");
 
@@ -21,7 +22,7 @@ export async function GET(
 
     await connectDB();
 
-    const barber = await Barber.findById(params.id);
+    const barber = await Barber.findById(id);
 
     if (!barber) {
       return NextResponse.json({ error: "Barber not found" }, { status: 404 });
@@ -47,7 +48,7 @@ export async function GET(
     endOfDay.setHours(23, 59, 59, 999);
 
     const existingSlots = await TimeSlot.find({
-      barberId: params.id,
+      barberId: id,
       date: {
         $gte: startOfDay,
         $lte: endOfDay,

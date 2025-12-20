@@ -4,12 +4,13 @@ import Barber from "@/lib/models/Barber";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await connectDB();
 
-    const barber = await Barber.findById(params.id).select("-password");
+    const barber = await Barber.findById(id).select("-password");
 
     if (!barber) {
       return NextResponse.json({ error: "Barber not found" }, { status: 404 });
