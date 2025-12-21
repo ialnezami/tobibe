@@ -26,7 +26,6 @@ export default function Home() {
   const router = useRouter();
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -45,18 +44,19 @@ export default function Home() {
     }
   };
 
-  const filteredBarbers = barbers.filter((barber) =>
-    barber.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    barber.location?.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    barber.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBarbers = barbers.filter(
+    (barber) =>
+      barber.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      barber.location?.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      barber.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading barbers...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm">Loading barbers...</p>
         </div>
       </div>
     );
@@ -64,33 +64,43 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Mobile-First Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">Barber Booking</h1>
-            <div className="flex items-center gap-4">
+            <h1 className="text-xl font-bold text-gray-900">Barber Booking</h1>
+            <div className="flex items-center gap-2">
               {session ? (
                 <>
                   <Link href="/my-bookings">
-                    <Button variant="outline">My Bookings</Button>
+                    <Button variant="outline" className="text-xs px-2 py-1 hidden sm:inline-flex">
+                      My Bookings
+                    </Button>
                   </Link>
                   {session.user.role === "barber" && (
                     <Link href="/barber/dashboard">
-                      <Button variant="primary">Dashboard</Button>
+                      <Button variant="primary" className="text-xs px-2 py-1 hidden sm:inline-flex">
+                        Dashboard
+                      </Button>
                     </Link>
                   )}
                   <Link href="/api/auth/signout">
-                    <Button variant="secondary">Logout</Button>
+                    <Button variant="secondary" className="text-xs px-2 py-1">
+                      Logout
+                    </Button>
                   </Link>
                 </>
               ) : (
                 <>
                   <Link href="/login">
-                    <Button variant="outline">Login</Button>
+                    <Button variant="outline" className="text-xs px-2 py-1">
+                      Login
+                    </Button>
                   </Link>
                   <Link href="/register">
-                    <Button variant="primary">Sign Up</Button>
+                    <Button variant="primary" className="text-xs px-2 py-1">
+                      Sign Up
+                    </Button>
                   </Link>
                 </>
               )}
@@ -100,91 +110,143 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and View Toggle */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <div className="flex-1 max-w-md w-full">
+      <main className="max-w-7xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
+        {/* Search Bar - Mobile Optimized */}
+        <div className="mb-4 sm:mb-6">
+          <div className="relative">
             <input
               type="text"
-              placeholder="Search barbers by name, location, or description..."
+              placeholder="Search barbers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
             />
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setViewMode("list")}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                viewMode === "list"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
-              }`}
+            <svg
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              List View
-            </button>
-            <button
-              onClick={() => setViewMode("map")}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                viewMode === "map"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              Map View
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
           </div>
         </div>
 
         {/* Results Count */}
-        <p className="text-gray-600 mb-4">
-          Found {filteredBarbers.length} barber{filteredBarbers.length !== 1 ? "s" : ""}
+        <p className="text-gray-600 mb-4 text-sm sm:text-base">
+          {filteredBarbers.length === 0
+            ? "No barbers found"
+            : `Found ${filteredBarbers.length} barber${filteredBarbers.length !== 1 ? "s" : ""}`}
         </p>
 
-        {viewMode === "list" ? (
-          <BarberListView barbers={filteredBarbers} />
+        {/* Barber List - Mobile First Grid */}
+        {filteredBarbers.length === 0 ? (
+          <div className="text-center py-12">
+            <svg
+              className="w-16 h-16 text-gray-300 mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <p className="text-gray-500 text-base mb-4">No barbers found</p>
+            <p className="text-gray-400 text-sm mb-6">
+              Try adjusting your search or check back later
+            </p>
+            <Link href="/seed">
+              <Button variant="outline">Seed Database</Button>
+            </Link>
+          </div>
         ) : (
-          <BarberMapView barbers={filteredBarbers} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredBarbers.map((barber) => (
+              <Card
+                key={barber._id}
+                className="hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200"
+                onClick={() => router.push(`/barbers/${barber._id}`)}
+              >
+                {/* Barber Avatar/Image - Mobile Optimized */}
+                <div className="h-40 sm:h-48 bg-gradient-to-br from-blue-400 to-blue-600 rounded-t-lg mb-4 -mx-6 -mt-6 flex items-center justify-center">
+                  <div className="text-white text-5xl sm:text-6xl font-bold">
+                    {barber.name.charAt(0)}
+                  </div>
+                </div>
+
+                {/* Barber Info */}
+                <div className="px-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                    {barber.name}
+                  </h3>
+                  
+                  {barber.description && (
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed">
+                      {barber.description}
+                    </p>
+                  )}
+
+                  {barber.location?.address && (
+                    <div className="flex items-start text-gray-500 text-xs sm:text-sm mb-4">
+                      <svg
+                        className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      <span className="line-clamp-2">{barber.location.address}</span>
+                    </div>
+                  )}
+
+                  <Button
+                    variant="primary"
+                    className="w-full text-sm py-2.5"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/barbers/${barber._id}`);
+                    }}
+                  >
+                    View Details & Book
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
         )}
       </main>
-    </div>
-  );
-}
 
-function BarberListView({ barbers }: { barbers: Barber[] }) {
-  const router = useRouter();
-
-  if (barbers.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No barbers found</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {barbers.map((barber) => (
-        <Card
-          key={barber._id}
-          className="hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => router.push(`/barbers/${barber._id}`)}
-        >
-          <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mb-4 flex items-center justify-center">
-            <div className="text-white text-4xl font-bold">
-              {barber.name.charAt(0)}
-            </div>
-          </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{barber.name}</h3>
-          {barber.description && (
-            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-              {barber.description}
-            </p>
-          )}
-          {barber.location?.address && (
-            <div className="flex items-center text-gray-500 text-sm mb-4">
+      {/* Mobile Bottom Navigation - Only show on mobile */}
+      {session && (
+        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 sm:hidden z-50">
+          <div className="flex items-center justify-around py-2">
+            <Link
+              href="/"
+              className="flex flex-col items-center px-4 py-2 text-blue-600"
+            >
               <svg
-                className="w-4 h-4 mr-2"
+                className="w-6 h-6 mb-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -193,82 +255,37 @@ function BarberListView({ barbers }: { barbers: Barber[] }) {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
+              </svg>
+              <span className="text-xs font-medium">Browse</span>
+            </Link>
+            <Link
+              href="/my-bookings"
+              className="flex flex-col items-center px-4 py-2 text-gray-600"
+            >
+              <svg
+                className="w-6 h-6 mb-1"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span className="truncate">{barber.location.address}</span>
-            </div>
-          )}
-          <Button
-            variant="primary"
-            className="w-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/barbers/${barber._id}`);
-            }}
-          >
-            View Details & Book
-          </Button>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-function BarberMapView({ barbers }: { barbers: Barber[] }) {
-  const router = useRouter();
-  const googleMapsApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  if (barbers.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No barbers found</p>
-      </div>
-    );
-  }
-
-  // Calculate center of all barbers
-  const center = barbers.reduce(
-    (acc, barber) => {
-      if (barber.location?.coordinates) {
-        acc.lat += barber.location.coordinates.lat;
-        acc.lng += barber.location.coordinates.lng;
-        acc.count++;
-      }
-      return acc;
-    },
-    { lat: 0, lng: 0, count: 0 }
-  );
-
-  const mapCenter = center.count > 0
-    ? { lat: center.lat / center.count, lng: center.lng / center.count }
-    : { lat: 40.7128, lng: -74.0060 }; // Default to NYC
-
-  return (
-    <div className="space-y-4">
-      <Card className="p-0 overflow-hidden">
-        <div className="h-[600px] relative">
-          {googleMapsApiKey ? (
-            <iframe
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/view?key=${googleMapsApiKey}&center=${mapCenter.lat},${mapCenter.lng}&zoom=12`}
-            />
-          ) : (
-            <div className="h-full flex items-center justify-center bg-gray-100">
-              <div className="text-center p-8">
+              <span className="text-xs font-medium">Bookings</span>
+            </Link>
+            {session.user.role === "barber" && (
+              <Link
+                href="/barber/dashboard"
+                className="flex flex-col items-center px-4 py-2 text-gray-600"
+              >
                 <svg
-                  className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                  className="w-6 h-6 mb-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -277,64 +294,18 @@ function BarberMapView({ barbers }: { barbers: Barber[] }) {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
                   />
                 </svg>
-                <p className="text-gray-600 mb-2">Map View</p>
-                <p className="text-sm text-gray-500">
-                  Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to enable map
-                </p>
-                <div className="mt-4 space-y-2">
-                  {barbers.map((barber) => (
-                    <div
-                      key={barber._id}
-                      className="p-3 bg-white rounded border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => router.push(`/barbers/${barber._id}`)}
-                    >
-                      <h4 className="font-semibold text-gray-900">{barber.name}</h4>
-                      {barber.location?.address && (
-                        <p className="text-sm text-gray-600">{barber.location.address}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </Card>
-
-      {/* List of barbers below map */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {barbers.map((barber) => (
-          <Card
-            key={barber._id}
-            className="hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => router.push(`/barbers/${barber._id}`)}
-          >
-            <h4 className="font-bold text-gray-900 mb-2">{barber.name}</h4>
-            {barber.location?.address && (
-              <p className="text-sm text-gray-600 mb-3">{barber.location.address}</p>
+                <span className="text-xs font-medium">Dashboard</span>
+              </Link>
             )}
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(`/barbers/${barber._id}`);
-              }}
-            >
-              Book Appointment
-            </Button>
-          </Card>
-        ))}
-      </div>
+          </div>
+        </nav>
+      )}
+
+      {/* Padding for mobile bottom nav */}
+      {session && <div className="h-16 sm:hidden"></div>}
     </div>
   );
 }

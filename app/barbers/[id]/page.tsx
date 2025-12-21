@@ -158,10 +158,10 @@ export default function BarberDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading barber details...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-sm">Loading barber details...</p>
         </div>
       </div>
     );
@@ -169,9 +169,9 @@ export default function BarberDetailPage() {
 
   if (!barber) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <p className="text-gray-600 text-lg mb-4">Barber not found</p>
+          <p className="text-gray-600 text-base mb-4">Barber not found</p>
           <Link href="/">
             <Button variant="primary">Back to Home</Button>
           </Link>
@@ -181,33 +181,55 @@ export default function BarberDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Link href="/" className="text-blue-600 hover:text-blue-800 mb-4 inline-block">
-          ← Back to barbers
+    <div className="min-h-screen bg-gray-50 pb-20 sm:pb-4">
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
+        <Link
+          href="/"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4 text-sm"
+        >
+          <svg
+            className="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Back to barbers
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Barber Info */}
-          <div className="lg:col-span-1">
-            <Card>
-              <div className="h-64 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mb-6 flex items-center justify-center">
-                <div className="text-white text-6xl font-bold">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          {/* Left Column - Barber Info - Mobile First */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <Card className="sticky top-4">
+              <div className="h-48 sm:h-64 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mb-4 sm:mb-6 flex items-center justify-center -mx-6 -mt-6">
+                <div className="text-white text-6xl sm:text-7xl font-bold">
                   {barber.name.charAt(0)}
                 </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{barber.name}</h1>
-              
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+                {barber.name}
+              </h1>
+
               {barber.description && (
-                <p className="text-gray-600 mb-6">{barber.description}</p>
+                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
+                  {barber.description}
+                </p>
               )}
 
               {barber.location?.address && (
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2">Location</h3>
-                  <div className="flex items-start text-gray-600">
+                <div className="mb-4 sm:mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
+                    Location
+                  </h3>
+                  <div className="flex items-start text-gray-600 text-sm sm:text-base">
                     <svg
-                      className="w-5 h-5 mr-2 mt-0.5"
+                      className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -230,27 +252,31 @@ export default function BarberDetailPage() {
                 </div>
               )}
 
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2">Contact</h3>
-                <p className="text-gray-600">{barber.phone}</p>
-                <p className="text-gray-600">{barber.email}</p>
+              <div className="mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Contact</h3>
+                <p className="text-gray-600 text-sm sm:text-base">{barber.phone}</p>
+                <p className="text-gray-600 text-sm sm:text-base">{barber.email}</p>
               </div>
             </Card>
           </div>
 
-          {/* Right Column - Booking */}
-          <div className="lg:col-span-2">
-            <Card className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Book Appointment</h2>
+          {/* Right Column - Booking - Mobile First */}
+          <div className="lg:col-span-2 order-1 lg:order-2">
+            <Card>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+                Book Appointment
+              </h2>
 
               {/* Services Selection */}
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Select Services</h3>
-                <div className="space-y-3">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                  Select Services
+                </h3>
+                <div className="space-y-2 sm:space-y-3">
                   {services.map((service) => (
                     <label
                       key={service._id}
-                      className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-colors ${
+                      className={`flex items-center p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                         selectedServices.includes(service._id)
                           ? "border-blue-600 bg-blue-50"
                           : "border-gray-200 hover:border-gray-300"
@@ -260,15 +286,21 @@ export default function BarberDetailPage() {
                         type="checkbox"
                         checked={selectedServices.includes(service._id)}
                         onChange={() => handleServiceToggle(service._id)}
-                        className="mr-4 w-5 h-5 text-blue-600"
+                        className="mr-3 sm:mr-4 w-5 h-5 text-blue-600 flex-shrink-0"
                       />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium text-gray-900">{service.name}</span>
-                          <span className="text-blue-600 font-semibold">${service.price}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
+                          <span className="font-medium text-gray-900 text-sm sm:text-base">
+                            {service.name}
+                          </span>
+                          <span className="text-blue-600 font-semibold text-sm sm:text-base">
+                            ${service.price}
+                          </span>
                         </div>
                         {service.description && (
-                          <p className="text-sm text-gray-600 mt-1">{service.description}</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                            {service.description}
+                          </p>
                         )}
                         <p className="text-xs text-gray-500 mt-1">{service.duration} minutes</p>
                       </div>
@@ -277,10 +309,12 @@ export default function BarberDetailPage() {
                 </div>
               </div>
 
-              {/* Date Selection */}
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-900 mb-4">Select Date</h3>
-                <div className="grid grid-cols-7 gap-2">
+              {/* Date Selection - Mobile Optimized */}
+              <div className="mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                  Select Date
+                </h3>
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 overflow-x-auto pb-2">
                   {getAvailableDates().map((date) => {
                     const dateObj = new Date(date);
                     const isSelected = selectedDate === date;
@@ -288,32 +322,34 @@ export default function BarberDetailPage() {
                       <button
                         key={date}
                         onClick={() => setSelectedDate(date)}
-                        className={`p-3 rounded-lg border-2 transition-colors ${
+                        className={`p-2 sm:p-3 rounded-lg border-2 transition-colors text-center ${
                           isSelected
                             ? "border-blue-600 bg-blue-600 text-white"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
                         <div className="text-xs">{dateObj.toLocaleDateString("en-US", { weekday: "short" })}</div>
-                        <div className="text-lg font-semibold">{dateObj.getDate()}</div>
+                        <div className="text-base sm:text-lg font-semibold">{dateObj.getDate()}</div>
                       </button>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Time Slot Selection */}
+              {/* Time Slot Selection - Mobile Optimized */}
               {selectedDate && (
-                <div className="mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-4">Select Time</h3>
-                  <div className="grid grid-cols-4 gap-2">
+                <div className="mb-4 sm:mb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                    Select Time
+                  </h3>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {availability
                       .filter((slot) => slot.isAvailable)
                       .map((slot, index) => (
                         <button
                           key={index}
                           onClick={() => setSelectedTimeSlot(slot.startTime)}
-                          className={`p-3 rounded-lg border-2 transition-colors ${
+                          className={`p-2 sm:p-3 rounded-lg border-2 transition-colors text-sm sm:text-base ${
                             selectedTimeSlot === slot.startTime
                               ? "border-blue-600 bg-blue-600 text-white"
                               : "border-gray-200 hover:border-gray-300"
@@ -324,16 +360,18 @@ export default function BarberDetailPage() {
                       ))}
                   </div>
                   {availability.filter((slot) => slot.isAvailable).length === 0 && (
-                    <p className="text-gray-500">No available time slots for this date</p>
+                    <p className="text-gray-500 text-sm">No available time slots for this date</p>
                   )}
                 </div>
               )}
 
-              {/* Summary */}
+              {/* Summary - Mobile Optimized */}
               {selectedServices.length > 0 && (
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-2">Booking Summary</h3>
-                  <div className="space-y-1 text-sm">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
+                    Booking Summary
+                  </h3>
+                  <div className="space-y-1 text-xs sm:text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Services:</span>
                       <span className="font-medium">{selectedServices.length}</span>
@@ -342,7 +380,7 @@ export default function BarberDetailPage() {
                       <span className="text-gray-600">Total Time:</span>
                       <span className="font-medium">{calculateTotalTime()} minutes</span>
                     </div>
-                    <div className="flex justify-between text-lg font-bold pt-2 border-t">
+                    <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t">
                       <span>Total Price:</span>
                       <span className="text-blue-600">${calculateTotalPrice()}</span>
                     </div>
@@ -352,7 +390,7 @@ export default function BarberDetailPage() {
 
               <Button
                 variant="primary"
-                className="w-full"
+                className="w-full text-sm sm:text-base py-3"
                 onClick={handleBook}
                 disabled={
                   !selectedDate ||
@@ -369,4 +407,3 @@ export default function BarberDetailPage() {
     </div>
   );
 }
-
