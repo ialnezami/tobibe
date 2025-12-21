@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { Barber, WorkingHours } from "@/lib/types";
 
 const WorkingHoursSchema = new Schema(
@@ -61,5 +61,5 @@ const BarberSchema = new Schema(
   }
 );
 
-export default models.Barber || model<Barber>("Barber", BarberSchema);
+export default mongoose.models.Barber || model("Barber", BarberSchema);
 

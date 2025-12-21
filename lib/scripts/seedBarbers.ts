@@ -1,9 +1,36 @@
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { readFileSync, existsSync } from "fs";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import connectDB from "@/lib/db/connect";
 import Barber from "@/lib/models/Barber";
 import Service from "@/lib/models/Service";
 import User from "@/lib/models/User";
+
+// Load environment variables from .env.local
+// Use current working directory (where npm run seed is executed from)
+const envLocalPath = join(process.cwd(), ".env.local");
+if (existsSync(envLocalPath)) {
+  const envContent = readFileSync(envLocalPath, "utf-8");
+  envContent.split("\n").forEach((line) => {
+    const trimmedLine = line.trim();
+    if (trimmedLine && !trimmedLine.startsWith("#")) {
+      const match = trimmedLine.match(/^([^=]+)=(.*)$/);
+      if (match) {
+        const key = match[1].trim();
+        let value = match[2].trim();
+        // Remove quotes if present
+        if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        if (!process.env[key]) {
+          process.env[key] = value;
+        }
+      }
+    }
+  });
+}
 
 const sampleBarbers = [
   {
@@ -222,4 +249,3 @@ async function seedBarbers() {
 }
 
 seedBarbers();
-

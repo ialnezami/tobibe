@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { Booking } from "@/lib/types";
 
 const BookingSchema = new Schema(
@@ -72,5 +72,5 @@ BookingSchema.index({ customerId: 1, date: 1 });
 BookingSchema.index({ barberId: 1, date: 1 });
 BookingSchema.index({ date: 1, startTime: 1 });
 
-export default models.Booking || model<Booking>("Booking", BookingSchema);
+export default mongoose.models.Booking || model("Booking", BookingSchema);
 

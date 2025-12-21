@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { Service } from "@/lib/types";
 
 const ServiceSchema = new Schema(
@@ -38,5 +38,5 @@ const ServiceSchema = new Schema(
   }
 );
 
-export default models.Service || model<Service>("Service", ServiceSchema);
+export default mongoose.models.Service || model("Service", ServiceSchema);
 

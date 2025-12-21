@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { TimeSlot } from "@/lib/types";
 
 const TimeSlotSchema = new Schema(
@@ -41,5 +41,5 @@ const TimeSlotSchema = new Schema(
 // Index for efficient queries
 TimeSlotSchema.index({ barberId: 1, date: 1, startTime: 1 });
 
-export default models.TimeSlot || model<TimeSlot>("TimeSlot", TimeSlotSchema);
+export default mongoose.models.TimeSlot || model("TimeSlot", TimeSlotSchema);
 
