@@ -169,23 +169,23 @@
 - [x] Create booking detail view
 
 ### 6.3 Booking Management (Barber)
-- [ ] Create barber dashboard
-- [ ] Display all bookings (upcoming and past)
-- [ ] Implement booking status updates (confirmed, cancelled)
-- [ ] Add booking filters and search
-- [ ] Create booking detail view for barbers
+- [x] Create barber dashboard
+- [x] Display all bookings (upcoming and past)
+- [x] Implement booking status updates (confirmed, cancelled)
+- [x] Add booking filters and search
+- [x] Create booking detail view for barbers
 
 ### 6.4 Barber-Assisted Booking (Walk-in/Phone/SMS)
-- [ ] Create "Book for Customer" feature/page
-- [ ] Implement customer search functionality (by name, phone, email)
-- [ ] Create customer lookup API endpoint
-- [ ] Add "Create New Customer" option for barbers
-- [ ] Build quick customer creation form (minimal required fields)
-- [ ] Create booking flow for barber-initiated bookings
-- [ ] Implement booking creation API that supports barber-initiated bookings
-- [ ] Add booking source tracking (self-service vs barber-assisted)
-- [ ] Ensure barbers can only book for their own calendar
-- [ ] Add booking confirmation display for barbers to share with customers
+- [x] Create "Book for Customer" feature/page
+- [x] Implement customer search functionality (by name, phone, email)
+- [x] Create customer lookup API endpoint
+- [x] Add "Create New Customer" option for barbers
+- [x] Build quick customer creation form (minimal required fields)
+- [x] Create booking flow for barber-initiated bookings
+- [x] Implement booking creation API that supports barber-initiated bookings
+- [x] Add booking source tracking (self-service vs barber-assisted)
+- [x] Ensure barbers can only book for their own calendar
+- [x] Add booking confirmation display for barbers to share with customers
 
 ## Phase 7: UI/UX Polish
 

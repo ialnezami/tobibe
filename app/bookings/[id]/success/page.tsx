@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/Card";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 export default function BookingSuccessPage() {
   const params = useParams();
   const router = useRouter();
+  const { data: session } = useSession();
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -122,13 +124,26 @@ export default function BookingSuccessPage() {
           </div>
         </div>
 
-        <div className="flex gap-4 justify-center">
-          <Link href="/my-bookings">
-            <Button variant="primary">View My Bookings</Button>
-          </Link>
-          <Link href="/">
-            <Button variant="outline">Book Another</Button>
-          </Link>
+        <div className="flex gap-4 justify-center flex-wrap">
+          {session?.user?.role === "barber" ? (
+            <>
+              <Link href="/barber/dashboard">
+                <Button variant="primary">Back to Dashboard</Button>
+              </Link>
+              <Link href="/barber/book-customer">
+                <Button variant="outline">Book Another Customer</Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href="/my-bookings">
+                <Button variant="primary">View My Bookings</Button>
+              </Link>
+              <Link href="/">
+                <Button variant="outline">Book Another</Button>
+              </Link>
+            </>
+          )}
         </div>
       </Card>
     </div>
