@@ -68,9 +68,20 @@ npm start
 
 After deployment, seed the database with sample barbers:
 
-### Option 1: Using API Endpoint (Recommended)
+### Option 1: Using Web Interface (Easiest - Recommended)
 
-1. Visit your deployed app's seed endpoint:
+1. Visit the seed page in your browser:
+   ```
+   https://your-app.vercel.app/seed
+   ```
+
+2. Click the "Seed Database" button
+
+The page will show a success message when done, and you can click "View Barbers" to see the seeded data.
+
+### Option 2: Using API Endpoint (Programmatic)
+
+1. Visit your deployed app's seed API endpoint:
    ```
    https://your-app.vercel.app/api/seed
    ```
