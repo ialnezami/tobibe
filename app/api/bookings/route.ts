@@ -5,7 +5,10 @@ import connectDB from "@/lib/db/connect";
 import Booking from "@/lib/models/Booking";
 import TimeSlot from "@/lib/models/TimeSlot";
 import Service from "@/lib/models/Service";
+import User from "@/lib/models/User";
 import { calculateBookingDuration, hasTimeSlotConflict } from "@/lib/utils/timeSlots";
+import { generateBookingCalendarEvent } from "@/lib/utils/calendar";
+import { sendCalendarInvite } from "@/lib/utils/email";
 
 // GET all bookings (filtered by user role)
 export async function GET(request: NextRequest) {
@@ -186,6 +189,57 @@ export async function POST(request: NextRequest) {
       .populate("customerId", "name email phone")
       .populate("barberId", "name email phone")
       .populate("serviceIds", "name price duration");
+
+    // Send calendar invitations via email
+    try {
+      const barber = populatedBooking.barberId as any;
+      const customer = populatedBooking.customerId as any;
+      const services = populatedBooking.serviceIds as any[];
+
+      if (barber?.email && customer?.email) {
+        const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || "http://localhost:3000";
+        const calendarContent = generateBookingCalendarEvent(
+          populatedBooking,
+          {
+            name: barber.name,
+            email: barber.email,
+            phone: barber.phone,
+          },
+          {
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+          },
+          services.map((s) => ({
+            name: s.name,
+            price: s.price,
+            duration: s.duration,
+          })),
+          baseUrl
+        );
+
+        if (calendarContent) {
+          const servicesList = services.map((s: any) => s.name);
+          const timeRange = `${populatedBooking.startTime} - ${populatedBooking.endTime}`;
+
+          // Send to both barber and customer
+          await sendCalendarInvite(
+            [barber.email, customer.email],
+            calendarContent,
+            {
+              barberName: barber.name,
+              customerName: customer.name,
+              date: populatedBooking.date,
+              time: timeRange,
+              services: servicesList,
+            }
+          );
+        }
+      }
+    } catch (emailError) {
+      // Log error but don't fail the booking creation
+      console.error("Error sending calendar invites:", emailError);
+    }
 
     return NextResponse.json(
       { message: "Booking created successfully", booking: populatedBooking },

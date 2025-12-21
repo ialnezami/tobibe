@@ -29,6 +29,14 @@ DATABASE_URL=your_mongodb_atlas_connection_string
 NEXTAUTH_URL=https://your-app.vercel.app
 NEXTAUTH_SECRET=your_generated_secret_here
 NODE_ENV=production
+
+# Email Configuration (for calendar invitations)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+EMAIL_FROM=noreply@yourdomain.com
 ```
 
 **To generate NEXTAUTH_SECRET:**

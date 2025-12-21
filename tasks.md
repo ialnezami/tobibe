@@ -141,6 +141,16 @@
 
 ## Phase 6: Booking System
 
+### 6.0 Calendar Integration & Email Notifications
+- [x] Install calendar and email dependencies (ics, nodemailer)
+- [x] Create calendar event generation utility (.ics files)
+- [x] Create email sending utility with calendar attachments
+- [x] Update booking creation to automatically send calendar invites
+- [x] Send invitations to both barber and customer
+- [x] Add email configuration environment variables
+- [x] Support Google Calendar, Outlook, Apple Calendar via ICS format
+- [x] Include booking details in email (date, time, services, price)
+
 ### 6.1 Booking Flow
 - [x] Create booking page/component
 - [x] Display available time slots for selected barber
@@ -151,12 +161,12 @@
 - [x] Create booking success page
 
 ### 6.2 Booking Management (Customer)
-- [ ] Create "My Bookings" page
-- [ ] Display upcoming appointments
-- [ ] Display booking history
-- [ ] Implement booking cancellation
+- [x] Create "My Bookings" page
+- [x] Display upcoming appointments
+- [x] Display booking history
+- [x] Implement booking cancellation
 - [ ] Add booking rescheduling functionality (optional for MVP)
-- [ ] Create booking detail view
+- [x] Create booking detail view
 
 ### 6.3 Booking Management (Barber)
 - [ ] Create barber dashboard

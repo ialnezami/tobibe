@@ -1,21 +1,34 @@
 # Barber Booking App
 
-A web application for booking barber appointments with service selection, allowing users to discover barbers on a map or list view, and enabling barbers to manage their availability and services.
+A modern barber appointment booking system built with Next.js, MongoDB, and NextAuth.js.
+
+## Features
+
+- 🔐 User authentication (customers and barbers)
+- 📅 Booking system with calendar integration
+- 📧 Email notifications with Google Calendar invitations
+- 📱 Mobile-first responsive design
+- 🔍 Barber discovery and search
+- 💳 Payment tracking
+- 📊 Booking management dashboard
 
 ## Tech Stack
 
-- **Frontend**: Next.js 16 with React 19, TypeScript
-- **Styling**: Tailwind CSS
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
 - **Database**: MongoDB with Mongoose
 - **Authentication**: NextAuth.js
-- **Deployment**: Vercel (ready)
+- **Styling**: Tailwind CSS
+- **Email**: Nodemailer with SMTP
+- **Calendar**: ICS file generation
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed
+- Node.js 18+ 
 - MongoDB database (local or MongoDB Atlas)
+- Email account for SMTP (Gmail recommended for development)
 
 ### Installation
 
@@ -30,171 +43,110 @@ cd barber
 npm install
 ```
 
-3. Seed the database with sample barbers (optional but recommended):
-```bash
-npm run seed
-```
-This will create 5 sample barbers with services for testing.
-
-4. Set up environment variables:
-Create a `.env.local` file in the root directory:
+3. Create a `.env.local` file:
 ```env
+# Database
 DATABASE_URL=your_mongodb_connection_string
-# or MONGODB_URI=your_mongodb_connection_string (both are supported)
+# or
+MONGODB_URI=your_mongodb_connection_string
+
+# Authentication
 NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret_here
-NODE_ENV=development
+NEXTAUTH_SECRET=your_secret_here
 
-# Optional: For Google Maps integration
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+# Email Configuration (for calendar invites)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password
+EMAIL_FROM=noreply@barberbooking.com
 ```
 
-To generate a NextAuth secret:
-```bash
-openssl rand -base64 32
-```
-
-5. Run the development server:
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+5. Seed the database (optional):
+Visit `http://localhost:3000/seed` in your browser or run:
+```bash
+npm run seed
+```
+
+## Google Calendar Integration
+
+The app automatically sends calendar invitations via email when bookings are created. Both the barber and customer receive:
+
+1. **Email notification** with booking details
+2. **Calendar invitation (.ics file)** attached to the email
+3. **One-click add to calendar** - Users can click the attachment to add the appointment to their Google Calendar, Outlook, Apple Calendar, or any other calendar app
+
+### Setting Up Email (Gmail)
+
+1. Enable 2-Factor Authentication on your Google account
+2. Generate an App Password:
+   - Go to https://myaccount.google.com/apppasswords
+   - Generate a new app password for "Mail"
+   - Use this password as `SMTP_PASSWORD` in your `.env.local`
+
+3. Configure environment variables:
+```env
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-16-character-app-password
+EMAIL_FROM=noreply@barberbooking.com
+```
+
+### Calendar Invitation Features
+
+- ✅ Automatically sent to both barber and customer
+- ✅ Includes all booking details (date, time, services, price)
+- ✅ Works with Google Calendar, Outlook, Apple Calendar, etc.
+- ✅ RSVP functionality
+- ✅ Reminder notifications (handled by user's calendar app)
 
 ## Project Structure
 
 ```
 barber/
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   │   ├── auth/         # Authentication endpoints
-│   │   ├── barbers/      # Barber endpoints
-│   │   ├── bookings/     # Booking endpoints
-│   │   ├── services/     # Service endpoints
-│   │   ├── time-slots/   # Time slot endpoints
-│   │   └── users/        # User endpoints
-│   ├── barbers/          # Barber detail pages
-│   ├── bookings/         # Booking pages
-│   ├── login/            # Login page
-│   ├── register/         # Registration page
-│   └── ...
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   └── providers/        # Context providers
-├── lib/                   # Utility libraries
-│   ├── auth/             # Authentication utilities
-│   ├── db/               # Database connection
-│   ├── models/           # Mongoose models
-│   ├── scripts/          # Database seed scripts
-│   ├── types/            # TypeScript types
-│   └── utils/            # Utility functions
-└── ...
+├── app/
+│   ├── api/           # API routes
+│   ├── barbers/       # Barber pages
+│   ├── bookings/      # Booking pages
+│   ├── login/         # Authentication pages
+│   └── my-bookings/   # Customer booking management
+├── components/        # React components
+├── lib/
+│   ├── db/           # Database connection
+│   ├── models/       # Mongoose models
+│   ├── utils/        # Utilities (calendar, email, etc.)
+│   └── types/        # TypeScript types
+└── public/           # Static assets
 ```
-
-## Features
-
-### Customer Features
-- ✅ Browse barbers (list and map view)
-- ✅ Search and filter barbers
-- ✅ View barber profiles and services
-- ✅ Book appointments
-- ✅ View booking history
-- ✅ User registration and authentication
-
-### Barber Features
-- ✅ Barber registration
-- ✅ Profile management
-- ✅ Service management (CRUD)
-- ✅ Availability management
-- ✅ Booking management
-- ✅ Book appointments for customers (walk-in/phone)
-- ✅ Payment tracking (cash/online)
-- ✅ Payment statistics and reports
 
 ## API Endpoints
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/[...nextauth]` - NextAuth endpoints
-
-### Users
-- `GET /api/users/profile` - Get current user profile
-- `PUT /api/users/profile` - Update user profile
-- `GET /api/users/search?q=query` - Search for customers (barbers only)
+### Bookings
+- `GET /api/bookings` - Get all bookings (filtered by user role)
+- `POST /api/bookings` - Create a new booking (sends calendar invites)
+- `GET /api/bookings/[id]` - Get booking details
+- `PUT /api/bookings/[id]` - Update booking status
 
 ### Barbers
-- `GET /api/barbers` - Get all barbers (with search/filter)
-- `GET /api/barbers/[id]` - Get barber by ID
-- `GET /api/barbers/profile` - Get current barber profile
-- `PUT /api/barbers/profile` - Update barber profile
-- `GET /api/barbers/[id]/availability?date=YYYY-MM-DD` - Get availability
-- `GET /api/barbers/payments/statistics` - Get payment statistics (barbers only)
+- `GET /api/barbers` - List all barbers
+- `GET /api/barbers/[id]` - Get barber details
+- `GET /api/barbers/[id]/availability` - Get available time slots
 
 ### Services
-- `GET /api/services?barberId=id` - Get services for a barber
-- `POST /api/services` - Create a service (barbers only)
-- `GET /api/services/[id]` - Get service by ID
-- `PUT /api/services/[id]` - Update service (barbers only)
-- `DELETE /api/services/[id]` - Delete service (barbers only)
-
-### Bookings
-- `GET /api/bookings` - Get bookings (filtered by role)
-- `POST /api/bookings` - Create a booking
-- `GET /api/bookings/[id]` - Get booking by ID
-- `PUT /api/bookings/[id]` - Update booking status
-- `DELETE /api/bookings/[id]` - Cancel booking
-
-### Time Slots
-- `GET /api/time-slots?barberId=id&date=YYYY-MM-DD` - Get time slots
-- `POST /api/time-slots` - Block/unblock time slots (barbers only)
-
-## Database Models
-
-- **User**: Customer users with basic info
-- **Barber**: Extends User with location, description, photos, working hours
-- **Service**: Services offered by barbers (name, price, duration)
-- **Booking**: Appointments linking customers, barbers, and services (includes payment info)
-- **TimeSlot**: Time slots with availability and booking status
-
-## Development
-
-```bash
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Run linter
-npm run lint
-
-# Seed database with sample barbers
-npm run seed
-```
+- `GET /api/services` - List services
+- `GET /api/services/[id]` - Get service details
 
 ## Deployment
 
-The app is ready to deploy to Vercel. See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
-
-Quick steps:
-1. Push code to GitHub
-2. Import project in Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy
-
-**Note:** Build is tested and successful. The app is production-ready.
-
-## Environment Variables
-
-- `DATABASE_URL` or `MONGODB_URI` - MongoDB connection string (DATABASE_URL takes precedence)
-- `NEXTAUTH_URL` - Application URL (e.g., http://localhost:3000)
-- `NEXTAUTH_SECRET` - Secret for NextAuth.js (generate with `openssl rand -base64 32`)
-- `NODE_ENV` - Environment (development/production)
-- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` - Optional: Google Maps API key for map view
-- `SEED_SECRET_TOKEN` - Optional: Secret token to protect the `/api/seed` endpoint in production
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 
 ## License
 
