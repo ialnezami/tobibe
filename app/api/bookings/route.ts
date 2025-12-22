@@ -22,20 +22,20 @@ export async function GET(request: NextRequest) {
     await connectDB();
 
     const searchParams = request.nextUrl.searchParams;
-    const barberId = searchParams.get("barberId");
+    const doctorId = searchParams.get("doctorId");
     const customerId = searchParams.get("customerId");
     const status = searchParams.get("status");
     const date = searchParams.get("date");
 
     const query: any = {};
 
-    if (session.user.role === "barber") {
-      query.barberId = session.user.id;
+    if (session.user.role === "doctor") {
+      query.doctorId = session.user.id;
     } else {
       query.customerId = session.user.id;
     }
 
-    if (barberId) query.barberId = barberId;
+    if (doctorId) query.doctorId = doctorId;
     if (customerId) query.customerId = customerId;
     if (status) query.status = status;
     if (date) {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     const bookings = await Booking.find(query)
       .populate("customerId", "name email phone")
-      .populate("barberId", "name email phone")
+      .populate("doctorId", "name email phone")
       .populate("serviceIds", "name price duration")
       .sort({ date: 1, startTime: 1 });
 
@@ -75,16 +75,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       customerId,
-      barberId,
+      doctorId,
       serviceIds,
       date,
       startTime,
       source = "self-service",
     } = body;
 
-    if (!barberId || !serviceIds || !date || !startTime) {
+    if (!doctorId || !serviceIds || !date || !startTime) {
       return NextResponse.json(
-        { error: "Barber ID, services, date, and start time are required" },
+        { error: "Doctor ID, services, date, and start time are required" },
         { status: 400 }
       );
     }
@@ -93,18 +93,18 @@ export async function POST(request: NextRequest) {
     let finalCustomerId = customerId;
     if (session.user.role === "customer") {
       finalCustomerId = session.user.id;
-    } else if (session.user.role === "barber") {
-      // Barber-assisted booking
+    } else if (session.user.role === "doctor") {
+      // Doctor-assisted booking
       if (!customerId) {
         return NextResponse.json(
-          { error: "Customer ID is required for barber-assisted bookings" },
+          { error: "Customer ID is required for doctor-assisted bookings" },
           { status: 400 }
         );
       }
-      // Verify barber can only book for their own calendar
-      if (barberId !== session.user.id) {
+      // Verify doctor can only book for their own calendar
+      if (doctorId !== session.user.id) {
         return NextResponse.json(
-          { error: "Barbers can only create bookings for their own calendar" },
+          { error: "Doctors can only create bookings for their own calendar" },
           { status: 403 }
         );
       }
@@ -141,7 +141,7 @@ export async function POST(request: NextRequest) {
     endOfDay.setHours(23, 59, 59, 999);
 
     const existingSlots = await TimeSlot.find({
-      barberId,
+      doctorId,
       date: { $gte: startOfDay, $lte: endOfDay },
       $or: [{ isBlocked: true }, { isAvailable: false }],
     });
@@ -156,13 +156,13 @@ export async function POST(request: NextRequest) {
     // Create booking with payment info
     const booking = new Booking({
       customerId: finalCustomerId,
-      barberId,
+      doctorId,
       serviceIds,
       date: bookingDate,
       startTime,
       endTime,
       status: "pending",
-      source: session.user.role === "barber" ? "barber-assisted" : "self-service",
+      source: session.user.role === "doctor" ? "doctor-assisted" : "self-service",
       payment: {
         amount: totalPrice,
         method: "pending",
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
 
     // Create/update time slots
     const timeSlot = new TimeSlot({
-      barberId,
+      doctorId,
       date: bookingDate,
       startTime,
       endTime,
@@ -187,23 +187,23 @@ export async function POST(request: NextRequest) {
 
     const populatedBooking = await Booking.findById(booking._id)
       .populate("customerId", "name email phone")
-      .populate("barberId", "name email phone")
+      .populate("doctorId", "name email phone")
       .populate("serviceIds", "name price duration");
 
     // Send calendar invitations via email
     try {
-      const barber = populatedBooking.barberId as any;
+      const doctor = populatedBooking.doctorId as any;
       const customer = populatedBooking.customerId as any;
       const services = populatedBooking.serviceIds as any[];
 
-      if (barber?.email && customer?.email) {
+      if (doctor?.email && customer?.email) {
         const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || "http://localhost:3000";
         const calendarContent = generateBookingCalendarEvent(
           populatedBooking,
           {
-            name: barber.name,
-            email: barber.email,
-            phone: barber.phone,
+            name: doctor.name,
+            email: doctor.email,
+            phone: doctor.phone,
           },
           {
             name: customer.name,
@@ -222,12 +222,12 @@ export async function POST(request: NextRequest) {
           const servicesList = services.map((s: any) => s.name);
           const timeRange = `${populatedBooking.startTime} - ${populatedBooking.endTime}`;
 
-          // Send to both barber and customer
+          // Send to both doctor and customer
           await sendCalendarInvite(
-            [barber.email, customer.email],
+            [doctor.email, customer.email],
             calendarContent,
             {
-              barberName: barber.name,
+              doctorName: doctor.name,
               customerName: customer.name,
               date: populatedBooking.date,
               time: timeRange,

@@ -42,9 +42,9 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session.user.role !== "barber") {
+    if (session.user.role !== "doctor") {
       return NextResponse.json(
-        { error: "Only barbers can update services" },
+        { error: "Only doctors can update services" },
         { status: 403 }
       );
     }
@@ -60,8 +60,8 @@ export async function PUT(
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
-    // Verify the service belongs to the barber
-    if (service.barberId.toString() !== session.user.id) {
+    // Verify the service belongs to the doctor
+    if (service.doctorId.toString() !== session.user.id) {
       return NextResponse.json(
         { error: "You can only update your own services" },
         { status: 403 }
@@ -102,9 +102,9 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session.user.role !== "barber") {
+    if (session.user.role !== "doctor") {
       return NextResponse.json(
-        { error: "Only barbers can delete services" },
+        { error: "Only doctors can delete services" },
         { status: 403 }
       );
     }
@@ -117,8 +117,8 @@ export async function DELETE(
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
-    // Verify the service belongs to the barber
-    if (service.barberId.toString() !== session.user.id) {
+    // Verify the service belongs to the doctor
+    if (service.doctorId.toString() !== session.user.id) {
       return NextResponse.json(
         { error: "You can only delete your own services" },
         { status: 403 }

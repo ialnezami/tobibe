@@ -1,5 +1,5 @@
 {
-  "name": "barber",
+  "name": "doctor",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "tsx lib/scripts/seedBarbers.ts"
+    "seed": "tsx lib/scripts/seedDoctors.ts"
   },
   "repository": {
     "type": "git",

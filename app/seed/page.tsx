@@ -49,8 +49,8 @@ export default function SeedPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Database Seeding</h1>
 
         <p className="text-gray-600 mb-6">
-          Click the button below to seed the database with sample barbers. This will only add
-          barbers if the database is empty.
+          Click the button below to seed the database with sample doctors. This will only add
+          doctors if the database is empty.
         </p>
 
         <Button
@@ -74,15 +74,15 @@ export default function SeedPage() {
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-green-700 font-semibold">Success!</p>
             <p className="text-green-600 text-sm">{result.message}</p>
-            {result.barberCount !== undefined && (
+            {result.doctorCount !== undefined && (
               <p className="text-green-600 text-sm mt-2">
-                Barbers in database: {result.barberCount}
+                Doctors in database: {result.doctorCount}
               </p>
             )}
             <div className="mt-4">
               <Link href="/">
                 <Button variant="primary" className="w-full">
-                  View Barbers
+                  View Doctors
                 </Button>
               </Link>
             </div>
@@ -98,4 +98,5 @@ export default function SeedPage() {
     </div>
   );
 }
+
 

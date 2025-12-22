@@ -12,10 +12,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Only barbers can search for customers
-    if (session.user.role !== "barber") {
+    // Only doctors can search for customers
+    if (session.user.role !== "doctor") {
       return NextResponse.json(
-        { error: "Only barbers can search for customers" },
+        { error: "Only doctors can search for customers" },
         { status: 403 }
       );
     }
@@ -53,4 +53,5 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
 

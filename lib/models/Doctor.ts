@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from "mongoose";
-import { Barber, WorkingHours } from "@/lib/types";
+import { Doctor, WorkingHours } from "@/lib/types";
 
 const WorkingHoursSchema = new Schema(
   {
@@ -10,7 +10,7 @@ const WorkingHoursSchema = new Schema(
   { _id: false }
 );
 
-const BarberSchema = new Schema(
+const DoctorSchema = new Schema(
   {
     name: {
       type: String,
@@ -35,8 +35,8 @@ const BarberSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["customer", "barber"],
-      default: "barber",
+      enum: ["customer", "doctor"],
+      default: "doctor",
     },
     location: {
       address: String,
@@ -61,5 +61,5 @@ const BarberSchema = new Schema(
   }
 );
 
-export default mongoose.models.Barber || model("Barber", BarberSchema);
+export default mongoose.models.Doctor || model("Doctor", DoctorSchema);
 

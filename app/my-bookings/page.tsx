@@ -10,13 +10,13 @@ import { Card } from "@/components/ui/Card";
 interface Booking {
   _id: string;
   customerId: any;
-  barberId: any;
+  doctorId: any;
   serviceIds: any[];
   date: string;
   startTime: string;
   endTime: string;
   status: "pending" | "confirmed" | "cancelled" | "completed";
-  source: "self-service" | "barber-assisted";
+  source: "self-service" | "doctor-assisted";
   payment?: {
     amount: number;
     method: "cash" | "online" | "pending";
@@ -255,12 +255,12 @@ export default function MyBookingsPage() {
             </p>
             <p className="text-gray-400 text-sm mb-6">
               {filter === "upcoming" || filter === "all"
-                ? "Start by booking an appointment with a barber"
+                ? "Start by booking an appointment with a doctor"
                 : ""}
             </p>
             {filter !== "past" && (
               <Link href="/">
-                <Button variant="primary">Browse Barbers</Button>
+                <Button variant="primary">Browse Doctors</Button>
               </Link>
             )}
           </Card>
@@ -277,9 +277,9 @@ export default function MyBookingsPage() {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h3 className="text-lg font-bold text-gray-900 mb-1">
-                          {typeof booking.barberId === "object"
-                            ? booking.barberId.name
-                            : "Barber"}
+                          {typeof booking.doctorId === "object"
+                            ? booking.doctorId.name
+                            : "Doctor"}
                         </h3>
                         <span
                           className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(

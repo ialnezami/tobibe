@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 
-interface Barber {
+interface Doctor {
   _id: string;
   name: string;
   description?: string;
@@ -24,31 +24,31 @@ interface Barber {
 export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [barbers, setBarbers] = useState<Barber[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchBarbers();
+    fetchDoctors();
   }, []);
 
-  const fetchBarbers = async () => {
+  const fetchDoctors = async () => {
     try {
-      const response = await fetch("/api/barbers");
+      const response = await fetch("/api/doctors");
       const data = await response.json();
-      setBarbers(data.barbers || []);
+      setDoctors(data.doctors || []);
     } catch (error) {
-      console.error("Error fetching barbers:", error);
+      console.error("Error fetching doctors:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredBarbers = barbers.filter(
-    (barber) =>
-      barber.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      barber.location?.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      barber.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredDoctors = doctors.filter(
+    (doctor) =>
+      doctor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.location?.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor.description?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (loading) {
@@ -56,7 +56,7 @@ export default function Home() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm">Loading barbers...</p>
+          <p className="text-gray-600 text-sm">Loading doctors...</p>
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ export default function Home() {
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">Barber Booking</h1>
+            <h1 className="text-xl font-bold text-gray-900">Doctor Booking</h1>
             <div className="flex items-center gap-2">
               {session ? (
                 <>
@@ -77,8 +77,8 @@ export default function Home() {
                       My Bookings
                     </Button>
                   </Link>
-                  {session.user.role === "barber" && (
-                    <Link href="/barber/dashboard">
+                  {session.user.role === "doctor" && (
+                    <Link href="/doctor/dashboard">
                       <Button variant="primary" className="text-xs px-2 py-1 hidden sm:inline-flex">
                         Dashboard
                       </Button>
@@ -116,7 +116,7 @@ export default function Home() {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search barbers..."
+              placeholder="Search doctors..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
@@ -139,13 +139,13 @@ export default function Home() {
 
         {/* Results Count */}
         <p className="text-gray-600 mb-4 text-sm sm:text-base">
-          {filteredBarbers.length === 0
-            ? "No barbers found"
-            : `Found ${filteredBarbers.length} barber${filteredBarbers.length !== 1 ? "s" : ""}`}
+          {filteredDoctors.length === 0
+            ? "No doctors found"
+            : `Found ${filteredDoctors.length} doctor${filteredDoctors.length !== 1 ? "s" : ""}`}
         </p>
 
-        {/* Barber List - Mobile First Grid */}
-        {filteredBarbers.length === 0 ? (
+        {/* Doctor List - Mobile First Grid */}
+        {filteredDoctors.length === 0 ? (
           <div className="text-center py-12">
             <svg
               className="w-16 h-16 text-gray-300 mx-auto mb-4"
@@ -160,7 +160,7 @@ export default function Home() {
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
               />
             </svg>
-            <p className="text-gray-500 text-base mb-4">No barbers found</p>
+            <p className="text-gray-500 text-base mb-4">No doctors found</p>
             <p className="text-gray-400 text-sm mb-6">
               Try adjusting your search or check back later
             </p>
@@ -170,32 +170,32 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredBarbers.map((barber) => (
+            {filteredDoctors.map((doctor) => (
               <Card
-                key={barber._id}
+                key={doctor._id}
                 className="hover:shadow-lg transition-all duration-200 cursor-pointer border border-gray-200"
-                onClick={() => router.push(`/barbers/${barber._id}`)}
+                onClick={() => router.push(`/doctors/${doctor._id}`)}
               >
-                {/* Barber Avatar/Image - Mobile Optimized */}
+                {/* Doctor Avatar/Image - Mobile Optimized */}
                 <div className="h-40 sm:h-48 bg-gradient-to-br from-blue-400 to-blue-600 rounded-t-lg mb-4 -mx-6 -mt-6 flex items-center justify-center">
                   <div className="text-white text-5xl sm:text-6xl font-bold">
-                    {barber.name.charAt(0)}
+                    {doctor.name.charAt(0)}
                   </div>
                 </div>
 
-                {/* Barber Info */}
+                {/* Doctor Info */}
                 <div className="px-2">
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-1">
-                    {barber.name}
+                    {doctor.name}
                   </h3>
                   
-                  {barber.description && (
+                  {doctor.description && (
                     <p className="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed">
-                      {barber.description}
+                      {doctor.description}
                     </p>
                   )}
 
-                  {barber.location?.address && (
+                  {doctor.location?.address && (
                     <div className="flex items-start text-gray-500 text-xs sm:text-sm mb-4">
                       <svg
                         className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0"
@@ -216,7 +216,7 @@ export default function Home() {
                           d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                         />
                       </svg>
-                      <span className="line-clamp-2">{barber.location.address}</span>
+                      <span className="line-clamp-2">{doctor.location.address}</span>
                     </div>
                   )}
 
@@ -225,7 +225,7 @@ export default function Home() {
                     className="w-full text-sm py-2.5"
                     onClick={(e) => {
                       e.stopPropagation();
-                      router.push(`/barbers/${barber._id}`);
+                      router.push(`/doctors/${doctor._id}`);
                     }}
                   >
                     View Details & Book
@@ -279,9 +279,9 @@ export default function Home() {
               </svg>
               <span className="text-xs font-medium">Bookings</span>
             </Link>
-            {session.user.role === "barber" && (
+            {session.user.role === "doctor" && (
               <Link
-                href="/barber/dashboard"
+                href="/doctor/dashboard"
                 className="flex flex-col items-center px-4 py-2 text-gray-600"
               >
                 <svg

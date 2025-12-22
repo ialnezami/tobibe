@@ -3,9 +3,9 @@ import { TimeSlot } from "@/lib/types";
 
 const TimeSlotSchema = new Schema(
   {
-    barberId: {
+    doctorId: {
       type: Schema.Types.ObjectId,
-      ref: "Barber",
+      ref: "Doctor",
       required: true,
     },
     date: {
@@ -39,7 +39,7 @@ const TimeSlotSchema = new Schema(
 );
 
 // Index for efficient queries
-TimeSlotSchema.index({ barberId: 1, date: 1, startTime: 1 });
+TimeSlotSchema.index({ doctorId: 1, date: 1, startTime: 1 });
 
 export default mongoose.models.TimeSlot || model("TimeSlot", TimeSlotSchema);
 

@@ -22,7 +22,7 @@ export async function GET(
 
     const booking = await Booking.findById(id)
       .populate("customerId", "name email phone")
-      .populate("barberId", "name email phone")
+      .populate("doctorId", "name email phone")
       .populate("serviceIds", "name price duration");
 
     if (!booking) {
@@ -32,7 +32,7 @@ export async function GET(
     // Verify access
     const isOwner =
       booking.customerId.toString() === session.user.id ||
-      booking.barberId.toString() === session.user.id;
+      booking.doctorId.toString() === session.user.id;
 
     if (!isOwner) {
       return NextResponse.json(
@@ -82,18 +82,18 @@ export async function PUT(
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
-    // Verify access - barbers can update their bookings, customers can cancel their bookings
-    const isBarber = booking.barberId.toString() === session.user.id;
+    // Verify access - doctors can update their bookings, customers can cancel their bookings
+    const isDoctor = booking.doctorId.toString() === session.user.id;
     const isCustomer = booking.customerId.toString() === session.user.id;
 
-    if (!isBarber && !isCustomer) {
+    if (!isDoctor && !isCustomer) {
       return NextResponse.json(
         { error: "You don't have permission to update this booking" },
         { status: 403 }
       );
     }
 
-    // Customers can only cancel, barbers can update status
+    // Customers can only cancel, doctors can update status
     if (isCustomer && status !== "cancelled") {
       return NextResponse.json(
         { error: "Customers can only cancel bookings" },
@@ -105,8 +105,8 @@ export async function PUT(
       booking.status = status;
     }
 
-    // Update payment information (barbers only)
-    if (payment && isBarber) {
+    // Update payment information (doctors only)
+    if (payment && isDoctor) {
       if (payment.method) {
         booking.payment = booking.payment || { amount: 0, method: "pending", status: "pending" };
         booking.payment.method = payment.method;
@@ -132,7 +132,7 @@ export async function PUT(
 
     const updatedBooking = await Booking.findById(id)
       .populate("customerId", "name email phone")
-      .populate("barberId", "name email phone")
+      .populate("doctorId", "name email phone")
       .populate("serviceIds", "name price duration");
 
     return NextResponse.json(
@@ -172,7 +172,7 @@ export async function DELETE(
     // Verify access
     const isOwner =
       booking.customerId.toString() === session.user.id ||
-      booking.barberId.toString() === session.user.id;
+      booking.doctorId.toString() === session.user.id;
 
     if (!isOwner) {
       return NextResponse.json(

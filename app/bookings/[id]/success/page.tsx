@@ -90,10 +90,10 @@ export default function BookingSuccessPage() {
           <h2 className="font-semibold text-gray-900 mb-4">Booking Details</h2>
           <div className="space-y-3">
             <div>
-              <span className="text-gray-600">Barber: </span>
+              <span className="text-gray-600">Doctor: </span>
               <span className="font-medium">
-                {typeof booking.barberId === "object"
-                  ? booking.barberId.name
+                {typeof booking.doctorId === "object"
+                  ? booking.doctorId.name
                   : "Loading..."}
               </span>
             </div>
@@ -125,12 +125,12 @@ export default function BookingSuccessPage() {
         </div>
 
         <div className="flex gap-4 justify-center flex-wrap">
-          {session?.user?.role === "barber" ? (
+          {session?.user?.role === "doctor" ? (
             <>
-              <Link href="/barber/dashboard">
+              <Link href="/doctor/dashboard">
                 <Button variant="primary">Back to Dashboard</Button>
               </Link>
-              <Link href="/barber/book-customer">
+              <Link href="/doctor/book-customer">
                 <Button variant="outline">Book Another Customer</Button>
               </Link>
             </>

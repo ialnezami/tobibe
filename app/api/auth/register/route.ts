@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // For customers, password is optional (quick creation)
-    // For barbers or full registration, password is required
+    // For doctors or full registration, password is required
     const isQuickCreation = !password && role === "customer";
 
     await connectDB();
@@ -69,4 +69,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 

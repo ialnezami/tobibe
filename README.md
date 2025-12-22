@@ -1,14 +1,14 @@
-# Barber Booking App
+# Doctor Booking App
 
-A modern barber appointment booking system built with Next.js, MongoDB, and NextAuth.js.
+A modern doctor appointment booking system built with Next.js, MongoDB, and NextAuth.js.
 
 ## Features
 
-- 🔐 User authentication (customers and barbers)
+- 🔐 User authentication (customers and doctors)
 - 📅 Booking system with calendar integration
 - 📧 Email notifications with Google Calendar invitations
 - 📱 Mobile-first responsive design
-- 🔍 Barber discovery and search
+- 🔍 Doctor discovery and search
 - 💳 Payment tracking
 - 📊 Booking management dashboard
 
@@ -35,7 +35,7 @@ A modern barber appointment booking system built with Next.js, MongoDB, and Next
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd barber
+cd doctor
 ```
 
 2. Install dependencies:
@@ -60,7 +60,7 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=your-email@gmail.com
 SMTP_PASSWORD=your-app-password
-EMAIL_FROM=noreply@barberbooking.com
+EMAIL_FROM=noreply@doctorbooking.com
 ```
 
 4. Run the development server:
@@ -76,7 +76,7 @@ npm run seed
 
 ## Google Calendar Integration
 
-The app automatically sends calendar invitations via email when bookings are created. Both the barber and customer receive:
+The app automatically sends calendar invitations via email when bookings are created. Both the doctor and customer receive:
 
 1. **Email notification** with booking details
 2. **Calendar invitation (.ics file)** attached to the email
@@ -97,12 +97,12 @@ SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=your-email@gmail.com
 SMTP_PASSWORD=your-16-character-app-password
-EMAIL_FROM=noreply@barberbooking.com
+EMAIL_FROM=noreply@doctorbooking.com
 ```
 
 ### Calendar Invitation Features
 
-- ✅ Automatically sent to both barber and customer
+- ✅ Automatically sent to both doctor and customer
 - ✅ Includes all booking details (date, time, services, price)
 - ✅ Works with Google Calendar, Outlook, Apple Calendar, etc.
 - ✅ RSVP functionality
@@ -111,10 +111,10 @@ EMAIL_FROM=noreply@barberbooking.com
 ## Project Structure
 
 ```
-barber/
+doctor/
 ├── app/
 │   ├── api/           # API routes
-│   ├── barbers/       # Barber pages
+│   ├── doctors/       # Doctor pages
 │   ├── bookings/      # Booking pages
 │   ├── login/         # Authentication pages
 │   └── my-bookings/   # Customer booking management
@@ -135,10 +135,10 @@ barber/
 - `GET /api/bookings/[id]` - Get booking details
 - `PUT /api/bookings/[id]` - Update booking status
 
-### Barbers
-- `GET /api/barbers` - List all barbers
-- `GET /api/barbers/[id]` - Get barber details
-- `GET /api/barbers/[id]/availability` - Get available time slots
+### Doctors
+- `GET /api/doctors` - List all doctors
+- `GET /api/doctors/[id]` - Get doctor details
+- `GET /api/doctors/[id]/availability` - Get available time slots
 
 ### Services
 - `GET /api/services` - List services

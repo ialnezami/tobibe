@@ -4,23 +4,23 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db/connect";
 import Service from "@/lib/models/Service";
 
-// GET all services for a barber
+// GET all services for a doctor
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const searchParams = request.nextUrl.searchParams;
-    const barberId = searchParams.get("barberId");
+    const doctorId = searchParams.get("doctorId");
 
     await connectDB();
 
     const query: any = {};
-    if (barberId) {
-      query.barberId = barberId;
-    } else if (session?.user?.role === "barber") {
-      query.barberId = session.user.id;
+    if (doctorId) {
+      query.doctorId = doctorId;
+    } else if (session?.user?.role === "doctor") {
+      query.doctorId = session.user.id;
     } else {
       return NextResponse.json(
-        { error: "Barber ID is required" },
+        { error: "Doctor ID is required" },
         { status: 400 }
       );
     }
@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session.user.role !== "barber") {
+    if (session.user.role !== "doctor") {
       return NextResponse.json(
-        { error: "Only barbers can create services" },
+        { error: "Only doctors can create services" },
         { status: 403 }
       );
     }
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const service = new Service({
-      barberId: session.user.id,
+      doctorId: session.user.id,
       name,
       description,
       price,
@@ -88,4 +88,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 

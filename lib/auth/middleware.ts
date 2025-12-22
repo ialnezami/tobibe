@@ -13,7 +13,7 @@ export async function requireAuth(request: NextRequest) {
   return null;
 }
 
-export async function requireRole(request: NextRequest, role: "barber" | "customer") {
+export async function requireRole(request: NextRequest, role: "doctor" | "customer") {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -29,4 +29,5 @@ export async function requireRole(request: NextRequest, role: "barber" | "custom
 
   return null;
 }
+
 

@@ -50,7 +50,7 @@ export default function BookCustomerPage() {
       router.push("/login");
       return;
     }
-    if (status === "authenticated" && session?.user?.role !== "barber") {
+    if (status === "authenticated" && session?.user?.role !== "doctor") {
       router.push("/");
       return;
     }
@@ -67,7 +67,7 @@ export default function BookCustomerPage() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch(`/api/services?barberId=${session?.user?.id}`);
+      const response = await fetch(`/api/services?doctorId=${session?.user?.id}`);
       const data = await response.json();
       setServices(data.services.filter((s: Service) => s.isActive));
     } catch (error) {
@@ -78,7 +78,7 @@ export default function BookCustomerPage() {
   const fetchAvailability = async () => {
     try {
       const response = await fetch(
-        `/api/barbers/${session?.user?.id}/availability?date=${selectedDate}`
+        `/api/doctors/${session?.user?.id}/availability?date=${selectedDate}`
       );
       const data = await response.json();
       setAvailability(data.availability || []);
@@ -187,11 +187,11 @@ export default function BookCustomerPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerId: selectedCustomer._id,
-          barberId: session?.user?.id,
+          doctorId: session?.user?.id,
           serviceIds: selectedServices,
           date: selectedDate,
           startTime: selectedTimeSlot,
-          source: "barber-assisted",
+          source: "doctor-assisted",
         }),
       });
 
@@ -236,7 +236,7 @@ export default function BookCustomerPage() {
     <div className="min-h-screen bg-gray-50 pb-20 sm:pb-4">
       <div className="max-w-4xl mx-auto px-4 py-4 sm:py-6">
         <Link
-          href="/barber/dashboard"
+            href="/doctor/dashboard"
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4 text-sm"
         >
           <svg
@@ -525,7 +525,7 @@ export default function BookCustomerPage() {
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 sm:hidden z-50">
         <div className="flex items-center justify-around py-2">
           <Link
-            href="/barber/dashboard"
+            href="/doctor/dashboard"
             className="flex flex-col items-center px-4 py-2 text-gray-600"
           >
             <svg
@@ -544,7 +544,7 @@ export default function BookCustomerPage() {
             <span className="text-xs font-medium">Dashboard</span>
           </Link>
           <Link
-            href="/barber/book-customer"
+            href="/doctor/book-customer"
             className="flex flex-col items-center px-4 py-2 text-blue-600"
           >
             <svg
@@ -567,4 +567,5 @@ export default function BookCustomerPage() {
     </div>
   );
 }
+
 

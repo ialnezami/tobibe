@@ -3,9 +3,9 @@ import { Service } from "@/lib/types";
 
 const ServiceSchema = new Schema(
   {
-    barberId: {
+    doctorId: {
       type: Schema.Types.ObjectId,
-      ref: "Barber",
+      ref: "Doctor",
       required: true,
     },
     name: {

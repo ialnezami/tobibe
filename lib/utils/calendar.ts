@@ -64,7 +64,7 @@ export function generateCalendarEvent(
       status: "CONFIRMED" as const,
       busyStatus: "BUSY" as const,
       method: "REQUEST",
-      productId: "barber-booking-app",
+      productId: "doctor-booking-app",
     };
 
     const { error, value } = createEvent(event);
@@ -86,7 +86,7 @@ export function generateCalendarEvent(
  */
 export function generateBookingCalendarEvent(
   booking: any,
-  barber: { name: string; email: string; phone?: string },
+  doctor: { name: string; email: string; phone?: string },
   customer: { name: string; email: string; phone?: string },
   services: Array<{ name: string; price: number; duration: number }>,
   baseUrl: string = "http://localhost:3000"
@@ -104,7 +104,7 @@ export function generateBookingCalendarEvent(
   const serviceNames = services.map((s) => s.name).join(", ");
   const totalPrice = services.reduce((sum, s) => sum + s.price, 0);
 
-  const description = `Barber Appointment Booking
+  const description = `Doctor Appointment Booking
 
 Services: ${serviceNames}
 Total Price: $${totalPrice}
@@ -112,8 +112,8 @@ Total Price: $${totalPrice}
 Customer: ${customer.name}
 ${customer.phone ? `Phone: ${customer.phone}` : ""}
 
-Barber: ${barber.name}
-${barber.phone ? `Phone: ${barber.phone}` : ""}
+Doctor: ${doctor.name}
+${doctor.phone ? `Phone: ${doctor.phone}` : ""}
 
 Booking ID: ${booking._id}
 View booking: ${baseUrl}/bookings/${booking._id}
@@ -121,14 +121,14 @@ View booking: ${baseUrl}/bookings/${booking._id}
 Please arrive on time for your appointment.`;
 
   return generateCalendarEvent({
-    title: `Barber Appointment - ${barber.name}`,
+    title: `Doctor Appointment - ${doctor.name}`,
     description,
     start: startDateTime,
     end: endDateTime,
-    location: barber.phone ? `Contact: ${barber.phone}` : undefined,
+    location: doctor.phone ? `Contact: ${doctor.phone}` : undefined,
     organizer: {
-      name: "Barber Booking App",
-      email: process.env.EMAIL_FROM || "noreply@barberbooking.com",
+      name: "Doctor Booking App",
+      email: process.env.EMAIL_FROM || "noreply@doctorbooking.com",
     },
     attendees: [
       {
@@ -136,10 +136,11 @@ Please arrive on time for your appointment.`;
         email: customer.email,
       },
       {
-        name: barber.name,
-        email: barber.email,
+        name: doctor.name,
+        email: doctor.email,
       },
     ],
   });
 }
+
 

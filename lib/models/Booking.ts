@@ -8,9 +8,9 @@ const BookingSchema = new Schema(
       ref: "User",
       required: true,
     },
-    barberId: {
+    doctorId: {
       type: Schema.Types.ObjectId,
-      ref: "Barber",
+      ref: "Doctor",
       required: true,
     },
     serviceIds: [
@@ -39,7 +39,7 @@ const BookingSchema = new Schema(
     },
     source: {
       type: String,
-      enum: ["self-service", "barber-assisted"],
+      enum: ["self-service", "doctor-assisted"],
       required: true,
     },
     payment: {
@@ -69,7 +69,7 @@ const BookingSchema = new Schema(
 
 // Indexes for efficient queries
 BookingSchema.index({ customerId: 1, date: 1 });
-BookingSchema.index({ barberId: 1, date: 1 });
+BookingSchema.index({ doctorId: 1, date: 1 });
 BookingSchema.index({ date: 1, startTime: 1 });
 
 export default mongoose.models.Booking || model("Booking", BookingSchema);

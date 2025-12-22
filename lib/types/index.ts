@@ -5,12 +5,12 @@ export interface User {
   phone: string;
   address?: string;
   password?: string;
-  role: "customer" | "barber";
+  role: "customer" | "doctor";
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface Barber extends User {
+export interface Doctor extends User {
   location?: {
     address: string;
     coordinates: {
@@ -33,7 +33,7 @@ export interface WorkingHours {
 
 export interface Service {
   _id?: string;
-  barberId: string;
+  doctorId: string;
   name: string;
   description?: string;
   price: number;
@@ -45,7 +45,7 @@ export interface Service {
 
 export interface TimeSlot {
   _id?: string;
-  barberId: string;
+  doctorId: string;
   date: Date;
   startTime: string;
   endTime: string;
@@ -59,13 +59,13 @@ export interface TimeSlot {
 export interface Booking {
   _id?: string;
   customerId: string;
-  barberId: string;
+  doctorId: string;
   serviceIds: string[];
   date: Date;
   startTime: string;
   endTime: string;
   status: "pending" | "confirmed" | "cancelled" | "completed";
-  source: "self-service" | "barber-assisted";
+  source: "self-service" | "doctor-assisted";
   payment?: {
     amount: number;
     method: "cash" | "online" | "pending";

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
-interface Barber {
+interface Doctor {
   _id: string;
   name: string;
   email: string;
@@ -32,10 +32,10 @@ interface Service {
   isActive: boolean;
 }
 
-export default function BarberDetailPage() {
+export default function DoctorDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [barber, setBarber] = useState<Barber | null>(null);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -45,7 +45,7 @@ export default function BarberDetailPage() {
 
   useEffect(() => {
     if (params.id) {
-      fetchBarberDetails();
+      fetchDoctorDetails();
       fetchServices();
     }
   }, [params.id]);
@@ -56,13 +56,13 @@ export default function BarberDetailPage() {
     }
   }, [selectedDate, params.id]);
 
-  const fetchBarberDetails = async () => {
+  const fetchDoctorDetails = async () => {
     try {
-      const response = await fetch(`/api/barbers/${params.id}`);
+      const response = await fetch(`/api/doctors/${params.id}`);
       const data = await response.json();
-      setBarber(data.barber);
+      setDoctor(data.doctor);
     } catch (error) {
-      console.error("Error fetching barber:", error);
+      console.error("Error fetching doctor:", error);
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ export default function BarberDetailPage() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch(`/api/services?barberId=${params.id}`);
+      const response = await fetch(`/api/services?doctorId=${params.id}`);
       const data = await response.json();
       setServices(data.services.filter((s: Service) => s.isActive));
     } catch (error) {
@@ -81,7 +81,7 @@ export default function BarberDetailPage() {
   const fetchAvailability = async () => {
     try {
       const response = await fetch(
-        `/api/barbers/${params.id}/availability?date=${selectedDate}`
+        `/api/doctors/${params.id}/availability?date=${selectedDate}`
       );
       const data = await response.json();
       setAvailability(data.availability || []);
@@ -123,7 +123,7 @@ export default function BarberDetailPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          barberId: params.id,
+          doctorId: params.id,
           serviceIds: selectedServices,
           date: selectedDate,
           startTime: selectedTimeSlot,
@@ -161,17 +161,17 @@ export default function BarberDetailPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm">Loading barber details...</p>
+          <p className="text-gray-600 text-sm">Loading doctor details...</p>
         </div>
       </div>
     );
   }
 
-  if (!barber) {
+  if (!doctor) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="text-center">
-          <p className="text-gray-600 text-base mb-4">Barber not found</p>
+          <p className="text-gray-600 text-base mb-4">Doctor not found</p>
           <Link href="/">
             <Button variant="primary">Back to Home</Button>
           </Link>
@@ -200,29 +200,29 @@ export default function BarberDetailPage() {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to barbers
+          Back to doctors
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-          {/* Left Column - Barber Info - Mobile First */}
+          {/* Left Column - Doctor Info - Mobile First */}
           <div className="lg:col-span-1 order-2 lg:order-1">
             <Card className="sticky top-4">
               <div className="h-48 sm:h-64 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mb-4 sm:mb-6 flex items-center justify-center -mx-6 -mt-6">
                 <div className="text-white text-6xl sm:text-7xl font-bold">
-                  {barber.name.charAt(0)}
+                  {doctor.name.charAt(0)}
                 </div>
               </div>
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
-                {barber.name}
+                {doctor.name}
               </h1>
 
-              {barber.description && (
+              {doctor.description && (
                 <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
-                  {barber.description}
+                  {doctor.description}
                 </p>
               )}
 
-              {barber.location?.address && (
+              {doctor.location?.address && (
                 <div className="mb-4 sm:mb-6">
                   <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
                     Location
@@ -247,15 +247,15 @@ export default function BarberDetailPage() {
                         d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                       />
                     </svg>
-                    <span>{barber.location.address}</span>
+                    <span>{doctor.location.address}</span>
                   </div>
                 </div>
               )}
 
               <div className="mb-4 sm:mb-6">
                 <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Contact</h3>
-                <p className="text-gray-600 text-sm sm:text-base">{barber.phone}</p>
-                <p className="text-gray-600 text-sm sm:text-base">{barber.email}</p>
+                <p className="text-gray-600 text-sm sm:text-base">{doctor.phone}</p>
+                <p className="text-gray-600 text-sm sm:text-base">{doctor.email}</p>
               </div>
             </Card>
           </div>

@@ -16,7 +16,7 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     address: "",
-    role: "customer" as "customer" | "barber",
+    role: "customer" as "customer" | "doctor",
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -112,7 +112,7 @@ export default function RegisterPage() {
               className="w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
             >
               <option value="customer">Customer</option>
-              <option value="barber">Barber</option>
+              <option value="doctor">Doctor</option>
             </select>
           </div>
 

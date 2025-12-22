@@ -4,8 +4,8 @@ import { AuthProvider } from "@/lib/auth/context";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Barber Booking App",
-  description: "Book barber appointments with ease",
+  title: "Doctor Booking App",
+  description: "Book doctor appointments with ease",
 };
 
 export default function RootLayout({

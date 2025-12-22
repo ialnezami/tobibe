@@ -4,16 +4,16 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db/connect";
 import TimeSlot from "@/lib/models/TimeSlot";
 
-// GET time slots for a barber
+// GET time slots for a doctor
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const barberId = searchParams.get("barberId");
+    const doctorId = searchParams.get("doctorId");
     const date = searchParams.get("date");
 
-    if (!barberId || !date) {
+    if (!doctorId || !date) {
       return NextResponse.json(
-        { error: "Barber ID and date are required" },
+        { error: "Doctor ID and date are required" },
         { status: 400 }
       );
     }
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     endOfDay.setHours(23, 59, 59, 999);
 
     const slots = await TimeSlot.find({
-      barberId,
+      doctorId,
       date: { $gte: startOfDay, $lte: endOfDay },
     }).sort({ startTime: 1 });
 
@@ -50,25 +50,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session.user.role !== "barber") {
+    if (session.user.role !== "doctor") {
       return NextResponse.json(
-        { error: "Only barbers can manage time slots" },
+        { error: "Only doctors can manage time slots" },
         { status: 403 }
       );
     }
 
     const body = await request.json();
-    const { barberId, date, startTime, endTime, isBlocked } = body;
+    const { doctorId, date, startTime, endTime, isBlocked } = body;
 
-    if (!barberId || !date || !startTime || !endTime) {
+    if (!doctorId || !date || !startTime || !endTime) {
       return NextResponse.json(
-        { error: "Barber ID, date, start time, and end time are required" },
+        { error: "Doctor ID, date, start time, and end time are required" },
         { status: 400 }
       );
     }
 
-    // Verify barber can only manage their own slots
-    if (barberId !== session.user.id) {
+    // Verify doctor can only manage their own slots
+    if (doctorId !== session.user.id) {
       return NextResponse.json(
         { error: "You can only manage your own time slots" },
         { status: 403 }
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
 
     // Find or create time slot
     let timeSlot = await TimeSlot.findOne({
-      barberId,
+      doctorId,
       date: dateObj,
       startTime,
       endTime,
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       timeSlot.isAvailable = !timeSlot.isBlocked && !timeSlot.bookingId;
     } else {
       timeSlot = new TimeSlot({
-        barberId,
+        doctorId,
         date: dateObj,
         startTime,
         endTime,
@@ -115,4 +115,5 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
 

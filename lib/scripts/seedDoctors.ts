@@ -191,7 +191,7 @@ const sampleDoctors = [
   },
 ];
 
-async function seedBarbers() {
+async function seedDoctors() {
   try {
     console.log("Connecting to database...");
     await connectDB();
@@ -248,4 +248,4 @@ async function seedBarbers() {
   }
 }
 
-seedBarbers();
+seedDoctors();

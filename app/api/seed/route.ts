@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/db/connect";
-import Barber from "@/lib/models/Barber";
+import Doctor from "@/lib/models/Doctor";
 import Service from "@/lib/models/Service";
 import User from "@/lib/models/User";
 import bcrypt from "bcryptjs";
 
-const sampleBarbers = [
+const sampleDoctors = [
   {
     name: "Tony's Classic Cuts",
     email: "tony@barbershop.com",
     phone: "+1-555-0101",
     address: "123 Main Street, Downtown",
     password: "password123",
-    role: "barber" as const,
+    role: "doctor" as const,
     location: {
       address: "123 Main Street, Downtown, New York, NY 10001",
       coordinates: {
@@ -43,7 +43,7 @@ const sampleBarbers = [
     phone: "+1-555-0102",
     address: "456 Park Avenue, Midtown",
     password: "password123",
-    role: "barber" as const,
+    role: "doctor" as const,
     location: {
       address: "456 Park Avenue, Midtown, New York, NY 10022",
       coordinates: {
@@ -75,7 +75,7 @@ const sampleBarbers = [
     phone: "+1-555-0103",
     address: "789 Broadway, SoHo",
     password: "password123",
-    role: "barber" as const,
+    role: "doctor" as const,
     location: {
       address: "789 Broadway, SoHo, New York, NY 10003",
       coordinates: {
@@ -107,7 +107,7 @@ const sampleBarbers = [
     phone: "+1-555-0104",
     address: "321 5th Avenue, Financial District",
     password: "password123",
-    role: "barber" as const,
+    role: "doctor" as const,
     location: {
       address: "321 5th Avenue, Financial District, New York, NY 10004",
       coordinates: {
@@ -137,7 +137,7 @@ const sampleBarbers = [
     phone: "+1-555-0105",
     address: "555 Bleecker Street, Greenwich Village",
     password: "password123",
-    role: "barber" as const,
+    role: "doctor" as const,
     location: {
       address: "555 Bleecker Street, Greenwich Village, New York, NY 10012",
       coordinates: {
@@ -179,13 +179,13 @@ export async function POST(request: NextRequest) {
 
     await connectDB();
 
-    // Check if barbers already exist
-    const existingBarberCount = await Barber.countDocuments({ role: "barber" });
-    if (existingBarberCount > 0) {
+    // Check if doctors already exist
+    const existingDoctorCount = await Doctor.countDocuments({ role: "doctor" });
+    if (existingDoctorCount > 0) {
       return NextResponse.json(
         {
-          message: `Database already seeded. ${existingBarberCount} barbers exist.`,
-          barberCount: existingBarberCount,
+          message: `Database already seeded. ${existingDoctorCount} doctors exist.`,
+          doctorCount: existingDoctorCount,
         },
         { status: 200 }
       );
@@ -193,29 +193,29 @@ export async function POST(request: NextRequest) {
 
     let createdCount = 0;
 
-    for (const barberData of sampleBarbers) {
+    for (const doctorData of sampleDoctors) {
       // Check if user exists
-      const existingUser = await User.findOne({ email: barberData.email });
+      const existingUser = await User.findOne({ email: doctorData.email });
       if (existingUser) {
-        await User.deleteOne({ email: barberData.email });
+        await User.deleteOne({ email: doctorData.email });
       }
 
       // Hash password
-      const hashedPassword = await bcrypt.hash(barberData.password, 10);
+      const hashedPassword = await bcrypt.hash(doctorData.password, 10);
 
-      // Create barber
-      const barber = new Barber({
-        ...barberData,
+      // Create doctor
+      const doctor = new Doctor({
+        ...doctorData,
         password: hashedPassword,
-        workingHours: new Map(Object.entries(barberData.workingHours)),
+        workingHours: new Map(Object.entries(doctorData.workingHours)),
       });
 
-      await barber.save();
+      await doctor.save();
 
-      // Create services for this barber
-      for (const serviceData of barberData.services) {
+      // Create services for this doctor
+      for (const serviceData of doctorData.services) {
         const service = new Service({
-          barberId: barber._id,
+          doctorId: doctor._id,
           ...serviceData,
           isActive: true,
         });
@@ -227,8 +227,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: `Successfully seeded ${createdCount} barbers with their services.`,
-        barberCount: createdCount,
+        message: `Successfully seeded ${createdCount} doctors with their services.`,
+        doctorCount: createdCount,
       },
       { status: 200 }
     );
@@ -245,4 +245,5 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   return POST(request);
 }
+
 

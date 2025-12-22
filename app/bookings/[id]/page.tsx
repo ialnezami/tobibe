@@ -10,13 +10,13 @@ import { useSession } from "next-auth/react";
 interface Booking {
   _id: string;
   customerId: any;
-  barberId: any;
+  doctorId: any;
   serviceIds: any[];
   date: string;
   startTime: string;
   endTime: string;
   status: "pending" | "confirmed" | "cancelled" | "completed";
-  source: "self-service" | "barber-assisted";
+  source: "self-service" | "doctor-assisted";
   payment?: {
     amount: number;
     method: "cash" | "online" | "pending";
@@ -198,20 +198,20 @@ export default function BookingDetailPage() {
 
           {/* Booking Information */}
           <div className="space-y-6">
-            {/* Barber Info */}
+            {/* Doctor Info */}
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">Barber</h2>
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">Doctor</h2>
               <div className="bg-gray-50 rounded-lg p-4">
                 <p className="font-medium text-gray-900 text-base">
-                  {typeof booking.barberId === "object"
-                    ? booking.barberId.name
-                    : "Barber"}
+                  {typeof booking.doctorId === "object"
+                    ? booking.doctorId.name
+                    : "Doctor"}
                 </p>
-                {typeof booking.barberId === "object" && booking.barberId.phone && (
-                  <p className="text-gray-600 text-sm mt-1">{booking.barberId.phone}</p>
+                {typeof booking.doctorId === "object" && booking.doctorId.phone && (
+                  <p className="text-gray-600 text-sm mt-1">{booking.doctorId.phone}</p>
                 )}
-                {typeof booking.barberId === "object" && booking.barberId.email && (
-                  <p className="text-gray-600 text-sm">{booking.barberId.email}</p>
+                {typeof booking.doctorId === "object" && booking.doctorId.email && (
+                  <p className="text-gray-600 text-sm">{booking.doctorId.email}</p>
                 )}
               </div>
             </div>
@@ -434,4 +434,5 @@ export default function BookingDetailPage() {
     </div>
   );
 }
+
 

@@ -54,7 +54,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || "noreply@barberbooking.com",
+      from: process.env.EMAIL_FROM || "noreply@doctorbooking.com",
       to: Array.isArray(options.to) ? options.to.join(", ") : options.to,
       subject: options.subject,
       text: options.text,
@@ -78,14 +78,14 @@ export async function sendCalendarInvite(
   to: string | string[],
   calendarContent: string,
   bookingDetails: {
-    barberName: string;
+    doctorName: string;
     customerName: string;
     date: string;
     time: string;
     services: string[];
   }
 ): Promise<boolean> {
-  const subject = `Barber Appointment - ${bookingDetails.barberName} - ${bookingDetails.date}`;
+  const subject = `Doctor Appointment - ${bookingDetails.doctorName} - ${bookingDetails.date}`;
 
   const html = `
     <!DOCTYPE html>
@@ -96,17 +96,17 @@ export async function sendCalendarInvite(
       </head>
       <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-          <h1 style="color: white; margin: 0;">Barber Appointment Confirmation</h1>
+          <h1 style="color: white; margin: 0;">Doctor Appointment Confirmation</h1>
         </div>
         
         <div style="background: #f9f9f9; padding: 30px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 10px 10px;">
           <p style="font-size: 16px;">Hello,</p>
           
-          <p style="font-size: 16px;">Your barber appointment has been confirmed. Please find the details below:</p>
+          <p style="font-size: 16px;">Your doctor appointment has been confirmed. Please find the details below:</p>
           
           <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
             <h2 style="margin-top: 0; color: #667eea;">Appointment Details</h2>
-            <p><strong>Barber:</strong> ${bookingDetails.barberName}</p>
+            <p><strong>Doctor:</strong> ${bookingDetails.doctorName}</p>
             <p><strong>Customer:</strong> ${bookingDetails.customerName}</p>
             <p><strong>Date:</strong> ${new Date(bookingDetails.date).toLocaleDateString("en-US", {
               weekday: "long",
@@ -130,7 +130,7 @@ export async function sendCalendarInvite(
           
           <p style="font-size: 16px; margin-top: 30px;">
             Best regards,<br>
-            <strong>Barber Booking App</strong>
+            <strong>Doctor Booking App</strong>
           </p>
         </div>
         
@@ -142,11 +142,11 @@ export async function sendCalendarInvite(
   `;
 
   const text = `
-Barber Appointment Confirmation
+Doctor Appointment Confirmation
 
-Your barber appointment has been confirmed:
+Your doctor appointment has been confirmed:
 
-Barber: ${bookingDetails.barberName}
+Doctor: ${bookingDetails.doctorName}
 Customer: ${bookingDetails.customerName}
 Date: ${new Date(bookingDetails.date).toLocaleDateString("en-US", {
     weekday: "long",
@@ -176,4 +176,5 @@ Please arrive on time for your appointment.
     ],
   });
 }
+
 
