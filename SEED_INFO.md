@@ -13,39 +13,48 @@ After seeding, the following admin user will be created:
 The seed script creates 5 sample doctors with the following credentials:
 
 1. **Tony's Classic Cuts**
-   - Email: `tony@doctor.com`
+   - Email: `tony@barbershop.com`
    - Password: `password123`
 
 2. **Modern Barber Studio**
-   - Email: `modern@doctor.com`
+   - Email: `modern@barbershop.com`
    - Password: `password123`
 
 3. **Elite Grooming**
-   - Email: `elite@doctor.com`
+   - Email: `elite@barbershop.com`
    - Password: `password123`
 
 4. **Quick Clips Express**
-   - Email: `quick@doctor.com`
+   - Email: `quick@barbershop.com`
    - Password: `password123`
 
 5. **Vintage Barber Co.**
-   - Email: `vintage@doctor.com`
+   - Email: `vintage@barbershop.com`
    - Password: `password123`
+
+**Note**: These emails still reference "barbershop" from the original template. You may want to update them to use "doctor" domain in the seed script if desired.
 
 ## How to Seed
 
-1. Make sure your MongoDB connection is configured in `.env.local`:
+1. **Configure MongoDB Connection** in `.env.local`:
    ```
    DATABASE_URL=your_mongodb_connection_string
    # or
    MONGODB_URI=your_mongodb_connection_string
    ```
 
-2. Visit `http://localhost:3000/seed` in your browser
+2. **Whitelist Your IP Address** in MongoDB Atlas:
+   - Your current IP: `149.102.242.92`
+   - Go to MongoDB Atlas → Security → Network Access
+   - Click "Add IP Address" → "Add Current IP Address"
+   - Wait 1-2 minutes for changes to take effect
+   - See `MONGODB_TROUBLESHOOTING.md` for detailed instructions
 
-3. Click the "Seed Database" button
+3. Visit `http://localhost:3000/seed` in your browser
 
-4. Wait for the success message
+4. Click the "Seed Database" button
+
+5. Wait for the success message
 
 ## Testing Login
 
