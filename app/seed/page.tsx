@@ -16,13 +16,19 @@ export default function SeedPage() {
     setResult(null);
 
     try {
+      // Add timeout to the fetch request
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
       const response = await fetch("/api/seed", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        signal: controller.signal,
       });
 
+      clearTimeout(timeoutId);
       const data = await response.json();
 
       if (response.ok) {
@@ -31,7 +37,11 @@ export default function SeedPage() {
         setError(data.error || "Failed to seed database");
       }
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      if (err.name === "AbortError") {
+        setError("Request timed out. Please check your MongoDB connection.");
+      } else {
+        setError(err.message || "An error occurred");
+      }
     } finally {
       setLoading(false);
     }

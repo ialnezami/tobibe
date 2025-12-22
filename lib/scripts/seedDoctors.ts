@@ -205,6 +205,25 @@ async function seedDoctors() {
 
     console.log("No doctors found. Seeding database...");
 
+    // Create admin user
+    console.log("Creating admin user...");
+    const adminEmail = "admin@doctorbooking.com";
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    if (existingAdmin) {
+      await User.deleteOne({ email: adminEmail });
+    }
+    const adminPassword = await bcrypt.hash("admin123", 10);
+    const admin = new User({
+      name: "Admin User",
+      email: adminEmail,
+      phone: "+1-555-0000",
+      password: adminPassword,
+      role: "admin",
+    });
+    await admin.save();
+    console.log(`✅ Created admin user: ${adminEmail} / admin123`);
+
+    // Create doctors
     for (const doctorData of sampleDoctors) {
       console.log(`Creating doctor: ${doctorData.name}...`);
 
@@ -240,7 +259,10 @@ async function seedDoctors() {
     }
 
     console.log("\n✅ Seed completed successfully!");
-    console.log(`Created ${sampleDoctors.length} doctors with their services.`);
+    console.log(`Created 1 admin user and ${sampleDoctors.length} doctors with their services.`);
+    console.log("\nAdmin credentials:");
+    console.log(`  Email: ${adminEmail}`);
+    console.log(`  Password: admin123`);
     process.exit(0);
   } catch (error) {
     console.error("❌ Error seeding doctors:", error);
