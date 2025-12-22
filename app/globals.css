@@ -45,3 +45,13 @@ body {
     -webkit-line-clamp: 3;
   }
 }
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family: inherit;
+}
+
+.custom-doctor-icon {
+  background: transparent !important;
+  border: none !important;
+}
