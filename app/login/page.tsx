@@ -28,7 +28,14 @@ export default function LoginPage() {
       });
 
       if (result?.error) {
-        setError(result.error);
+        // Check if it's a database connection error
+        if (result.error.includes("Database connection") || result.error.includes("MongoDB")) {
+          setError(
+            `${result.error}\n\nPlease check your MongoDB connection. See MONGODB_TROUBLESHOOTING.md for help.`
+          );
+        } else {
+          setError(result.error);
+        }
       } else {
         router.push("/");
         router.refresh();
@@ -59,7 +66,20 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-              {error}
+              <p className="whitespace-pre-line">{error}</p>
+              {error.includes("Database connection") && (
+                <div className="mt-3 pt-3 border-t border-red-200">
+                  <p className="text-sm text-red-600 mb-2">
+                    <strong>Quick Fix:</strong> Whitelist your IP address in MongoDB Atlas:
+                  </p>
+                  <ol className="text-sm text-red-600 list-decimal list-inside space-y-1">
+                    <li>Go to <a href="https://cloud.mongodb.com/" target="_blank" rel="noopener noreferrer" className="underline">MongoDB Atlas</a></li>
+                    <li>Navigate to: Security → Network Access</li>
+                    <li>Click "Add IP Address" → "Add Current IP Address"</li>
+                    <li>Wait 1-2 minutes for changes to take effect</li>
+                  </ol>
+                </div>
+              )}
             </div>
           )}
 

@@ -17,7 +17,22 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Please enter your email and password");
         }
 
-        await connectDB();
+        try {
+          await connectDB();
+        } catch (error: any) {
+          // Check if it's a MongoDB connection error
+          if (
+            error?.message?.includes("Could not connect") ||
+            error?.message?.includes("MongoServerSelectionError") ||
+            error?.message?.includes("IP") ||
+            error?.message?.includes("whitelist")
+          ) {
+            throw new Error(
+              "Database connection failed. Please check your MongoDB connection and ensure your IP address is whitelisted in MongoDB Atlas."
+            );
+          }
+          throw new Error("Database connection error. Please try again later.");
+        }
 
         const user = await User.findOne({ email: credentials.email });
 

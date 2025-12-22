@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "========================================="
+echo "Your Current IP Address:"
+echo "========================================="
+curl -s https://api.ipify.org
+echo ""
+echo ""
+echo "========================================="
+echo "Add this IP to MongoDB Atlas Network Access"
+echo "========================================="
+echo ""
+echo "Steps:"
+echo "1. Go to https://cloud.mongodb.com/"
+echo "2. Navigate to: Security → Network Access"
+echo "3. Click 'Add IP Address'"
+echo "4. Click 'Add Current IP Address' or paste the IP above"
+echo "5. Wait 1-2 minutes for changes to take effect"
