@@ -193,6 +193,23 @@ export async function POST(request: NextRequest) {
 
     let createdCount = 0;
 
+    // Create admin user
+    const adminEmail = "admin@doctorbooking.com";
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    if (existingAdmin) {
+      await User.deleteOne({ email: adminEmail });
+    }
+    const adminPassword = await bcrypt.hash("admin123", 10);
+    const admin = new User({
+      name: "Admin User",
+      email: adminEmail,
+      phone: "+1-555-0000",
+      password: adminPassword,
+      role: "admin",
+    });
+    await admin.save();
+
+    // Create doctors
     for (const doctorData of sampleDoctors) {
       // Check if user exists
       const existingUser = await User.findOne({ email: doctorData.email });
@@ -227,8 +244,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: `Successfully seeded ${createdCount} doctors with their services.`,
+        message: `Successfully seeded ${createdCount} doctors with their services and created admin user.`,
         doctorCount: createdCount,
+        admin: {
+          email: adminEmail,
+          password: "admin123",
+        },
       },
       { status: 200 }
     );
