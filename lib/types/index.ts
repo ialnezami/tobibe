@@ -5,7 +5,7 @@ export interface User {
   phone: string;
   address?: string;
   password?: string;
-  role: "customer" | "doctor";
+  role: "customer" | "doctor" | "admin";
   createdAt?: Date;
   updatedAt?: Date;
 }
