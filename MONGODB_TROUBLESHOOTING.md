@@ -44,23 +44,24 @@ Or visit: https://www.whatismyip.com/
 
 ### Step 3: Verify Your Connection String
 
-Make sure your `.env.local` file has the correct connection string:
+Make sure your `.env.local` file has the correct connection string format:
 
 ```env
-DATABASE_URL=mongodb+srv://username:password@cluster.mongodb.net/database-name?retryWrites=true&w=majority
+DATABASE_URL=mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER>.mongodb.net/<YOUR_DATABASE>?retryWrites=true&w=majority
 ```
 
 Or:
 
 ```env
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database-name?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER>.mongodb.net/<YOUR_DATABASE>?retryWrites=true&w=majority
 ```
 
 **Important Notes:**
-- Replace `username` with your MongoDB Atlas username
-- Replace `password` with your MongoDB Atlas password (URL-encoded if it contains special characters)
-- Replace `cluster` with your actual cluster name
-- Replace `database-name` with your database name
+- Replace `<YOUR_USERNAME>` with your MongoDB Atlas username
+- Replace `<YOUR_PASSWORD>` with your MongoDB Atlas password (URL-encoded if it contains special characters)
+- Replace `<YOUR_CLUSTER>` with your actual cluster name
+- Replace `<YOUR_DATABASE>` with your database name
+- **Never commit your actual connection string to version control!**
 
 ### Step 4: Test the Connection
 
