@@ -63,15 +63,13 @@ export default function EditUserPage() {
     setSaving(true);
 
     try {
-      const updateData = { ...formData };
-      if (!updateData.password) {
-        delete updateData.password;
-      }
+      const { password, ...updateData } = formData;
+      const payload = password ? { ...updateData, password } : updateData;
 
       const response = await fetch(`/api/admin/users/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
