@@ -24,9 +24,26 @@ export default function BookingSuccessPage() {
     try {
       const response = await fetch(`/api/bookings/${params.id}`);
       const data = await response.json();
+      
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push(`/login?redirect=/bookings/${params.id}/success`);
+          return;
+        }
+        if (response.status === 403) {
+          console.error("Access denied to booking");
+        }
+        if (response.status === 404) {
+          console.error("Booking not found");
+        }
+        setBooking(null);
+        return;
+      }
+      
       setBooking(data.booking);
     } catch (error) {
       console.error("Error fetching booking:", error);
+      setBooking(null);
     } finally {
       setLoading(false);
     }
@@ -42,13 +59,40 @@ export default function BookingSuccessPage() {
 
   if (!booking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">Booking not found</p>
-          <Link href="/">
-            <Button variant="primary">Go Home</Button>
-          </Link>
-        </div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
+        <Card className="max-w-md w-full text-center">
+          <div className="mb-6">
+            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-slate-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-semibold text-slate-900 mb-2">
+              Booking Not Found
+            </h1>
+            <p className="text-slate-600 mb-6">
+              The booking you're looking for doesn't exist or you don't have access to it.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/my-bookings">
+              <Button variant="primary">View My Bookings</Button>
+            </Link>
+            <Link href="/">
+              <Button variant="outline">Go Home</Button>
+            </Link>
+          </div>
+        </Card>
       </div>
     );
   }

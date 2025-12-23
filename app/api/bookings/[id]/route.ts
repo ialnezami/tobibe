@@ -29,12 +29,13 @@ export async function GET(
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
     }
 
-    // Verify access
+    // Verify access - admins can view any booking
+    const isAdmin = session.user.role === "admin";
     const isOwner =
       booking.customerId.toString() === session.user.id ||
       booking.doctorId.toString() === session.user.id;
 
-    if (!isOwner) {
+    if (!isAdmin && !isOwner) {
       return NextResponse.json(
         { error: "You don't have access to this booking" },
         { status: 403 }

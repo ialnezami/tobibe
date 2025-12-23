@@ -35,10 +35,15 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFilters, setShowFilters] = useState(false);
+  const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
+  const [togglingFavorite, setTogglingFavorite] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDoctors();
-  }, []);
+    if (session?.user?.role === "customer") {
+      fetchFavorites();
+    }
+  }, [session]);
 
   const fetchDoctors = async () => {
     try {
@@ -49,6 +54,63 @@ export default function Home() {
       console.error("Error fetching doctors:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch("/api/patient/favorites");
+      const data = await response.json();
+      if (response.ok && data.favorites) {
+        const ids = new Set(
+          data.favorites.map((fav: any) =>
+            typeof fav.doctorId === "object" ? fav.doctorId._id : fav.doctorId
+          )
+        );
+        setFavoriteIds(ids);
+      }
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
+
+  const handleToggleFavorite = async (doctorId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+
+    if (!session?.user || session.user.role !== "customer") {
+      router.push("/login");
+      return;
+    }
+
+    setTogglingFavorite(doctorId);
+    try {
+      const isFavorite = favoriteIds.has(doctorId);
+      if (isFavorite) {
+        const response = await fetch(`/api/patient/favorites?doctorId=${doctorId}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          setFavoriteIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(doctorId);
+            return newSet;
+          });
+        }
+      } else {
+        const response = await fetch("/api/patient/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ doctorId }),
+        });
+        if (response.ok) {
+          setFavoriteIds((prev) => new Set([...prev, doctorId]));
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      alert("Failed to update favorite");
+    } finally {
+      setTogglingFavorite(null);
     }
   };
 
@@ -306,27 +368,60 @@ export default function Home() {
               </Card>
             ) : viewMode === "list" ? (
               <div className="space-y-4">
-                {filteredDoctors.map((doctor) => (
-                  <Card
-                    key={doctor._id}
-                    className="hover:shadow-lg hover:border-teal-300 transition-all duration-200 cursor-pointer border-2 border-slate-200 bg-white"
-                    onClick={() => router.push(`/doctors/${doctor._id}`)}
-                  >
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      {/* Doctor Avatar */}
-                      <div className="flex-shrink-0">
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl flex items-center justify-center shadow-md">
-                          <span className="text-white text-3xl sm:text-4xl font-bold">
-                            {doctor.name.charAt(0)}
-                          </span>
-                        </div>
-                      </div>
+                {filteredDoctors.map((doctor) => {
+                  const isFavorite = favoriteIds.has(doctor._id);
+                  return (
+                    <Card
+                      key={doctor._id}
+                      className="hover:shadow-lg hover:border-teal-300 transition-all duration-200 cursor-pointer border-2 border-slate-200 bg-white relative"
+                      onClick={() => router.push(`/doctors/${doctor._id}`)}
+                    >
+                      {/* Favorite Star Button */}
+                      {session?.user?.role === "customer" && (
+                        <button
+                          onClick={(e) => handleToggleFavorite(doctor._id, e)}
+                          disabled={togglingFavorite === doctor._id}
+                          className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white transition-all hover:scale-110 disabled:opacity-50"
+                          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          {togglingFavorite === doctor._id ? (
+                            <div className="w-5 h-5 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <svg
+                              className={`w-5 h-5 transition-colors ${
+                                isFavorite
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "fill-none text-slate-400 hover:text-yellow-400"
+                              }`}
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      )}
 
-                      {/* Doctor Info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-2">
-                          {doctor.name}
-                        </h3>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        {/* Doctor Avatar */}
+                        <div className="flex-shrink-0">
+                          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl flex items-center justify-center shadow-md">
+                            <span className="text-white text-3xl sm:text-4xl font-bold">
+                              {doctor.name.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Doctor Info */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-2">
+                            {doctor.name}
+                          </h3>
                         {doctor.description && (
                           <p className="text-slate-600 text-sm sm:text-base mb-3 line-clamp-2">
                             {doctor.description}
@@ -369,22 +464,56 @@ export default function Home() {
                       </div>
                     </div>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {filteredDoctors.map((doctor) => (
-                  <Card
-                    key={doctor._id}
-                    className="hover:shadow-xl hover:border-teal-300 transition-all duration-200 cursor-pointer border-2 border-slate-200 bg-white overflow-hidden group"
-                    onClick={() => router.push(`/doctors/${doctor._id}`)}
-                  >
-                    {/* Doctor Avatar/Image */}
-                    <div className="h-48 bg-gradient-to-br from-teal-600 to-teal-700 rounded-t-xl mb-4 -mx-6 -mt-6 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
-                      <div className="text-white text-6xl sm:text-7xl font-bold">
-                        {doctor.name.charAt(0)}
+                {filteredDoctors.map((doctor) => {
+                  const isFavorite = favoriteIds.has(doctor._id);
+                  return (
+                    <Card
+                      key={doctor._id}
+                      className="hover:shadow-xl hover:border-teal-300 transition-all duration-200 cursor-pointer border-2 border-slate-200 bg-white overflow-hidden group relative"
+                      onClick={() => router.push(`/doctors/${doctor._id}`)}
+                    >
+                      {/* Favorite Star Button */}
+                      {session?.user?.role === "customer" && (
+                        <button
+                          onClick={(e) => handleToggleFavorite(doctor._id, e)}
+                          disabled={togglingFavorite === doctor._id}
+                          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-md hover:bg-white transition-all hover:scale-110 disabled:opacity-50"
+                          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          {togglingFavorite === doctor._id ? (
+                            <div className="w-5 h-5 border-2 border-teal-600 border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <svg
+                              className={`w-5 h-5 transition-colors ${
+                                isFavorite
+                                  ? "fill-yellow-400 text-yellow-400"
+                                  : "fill-none text-slate-400 hover:text-yellow-400"
+                              }`}
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      )}
+
+                      {/* Doctor Avatar/Image */}
+                      <div className="h-48 bg-gradient-to-br from-teal-600 to-teal-700 rounded-t-xl mb-4 -mx-6 -mt-6 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        <div className="text-white text-6xl sm:text-7xl font-bold">
+                          {doctor.name.charAt(0)}
+                        </div>
                       </div>
-                    </div>
 
                     {/* Doctor Info */}
                     <div className="px-2">
@@ -435,7 +564,8 @@ export default function Home() {
                       </Button>
                     </div>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             )}
           </>
