@@ -1,0 +1,114 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "S'inscrire",
+    "signUp": "S'inscrire",
+    "signIn": "Se connecter",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "back": "Retour",
+    "next": "Suivant",
+    "submit": "Soumettre",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "nav": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "appointments": "Rendez-vous",
+    "bookings": "Réservations",
+    "doctors": "Médecins",
+    "patients": "Patients",
+    "services": "Services",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "notifications": "Notifications"
+  },
+  "home": {
+    "title": "Trouvez Votre Médecin Idéal",
+    "subtitle": "Réservez des rendez-vous avec des professionnels de santé de confiance. Rapide, facile et pratique.",
+    "getStarted": "Commencer",
+    "browseDoctors": "Parcourir les médecins",
+    "searchPlaceholder": "Rechercher par nom, lieu ou spécialité...",
+    "noDoctorsFound": "Aucun médecin trouvé",
+    "viewDetails": "Voir les détails et réserver un rendez-vous",
+    "bookAppointment": "Réserver un rendez-vous"
+  },
+  "auth": {
+    "loginTitle": "Connectez-vous à votre compte",
+    "registerTitle": "Créez votre compte",
+    "forgotPassword": "Mot de passe oublié?",
+    "alreadyHaveAccount": "Vous avez déjà un compte?",
+    "dontHaveAccount": "Vous n'avez pas de compte?",
+    "role": "Rôle",
+    "customer": "Client",
+    "doctor": "Médecin",
+    "admin": "Administrateur"
+  },
+  "booking": {
+    "title": "Détails de la réservation",
+    "doctor": "Médecin",
+    "date": "Date",
+    "time": "Heure",
+    "services": "Services",
+    "payment": "Paiement",
+    "status": "Statut",
+    "totalAmount": "Montant total",
+    "cancelBooking": "Annuler la réservation",
+    "backToBookings": "Retour aux réservations",
+    "notifyLate": "Notifier que je serai en retard",
+    "chatWithDoctor": "Discuter avec le médecin"
+  },
+  "dashboard": {
+    "welcome": "Bon retour!",
+    "totalAppointments": "Total des rendez-vous",
+    "upcoming": "À venir",
+    "past": "Passé",
+    "favoriteDoctors": "Médecins favoris",
+    "nextAppointment": "Prochain rendez-vous",
+    "recentAppointments": "Rendez-vous récents"
+  },
+  "chat": {
+    "title": "Discuter avec",
+    "unavailable": "Chat indisponible",
+    "unavailableMessage": "Le chat n'est disponible que pendant des fenêtres de temps spécifiques:",
+    "oneHourBefore": "1 heure avant le rendez-vous",
+    "appointmentTime": "Heure du rendez-vous",
+    "twentyFourHoursAfter": "24 heures après le rendez-vous",
+    "typeMessage": "Tapez votre message...",
+    "send": "Envoyer",
+    "noMessages": "Aucun message pour le moment. Commencez la conversation!"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "Aucune notification pour le moment",
+    "markAsRead": "Marquer comme lu",
+    "viewBooking": "Voir la réservation",
+    "unreadCount": "notification non lue"
+  },
+  "language": {
+    "select": "Sélectionner la langue",
+    "english": "Anglais",
+    "arabic": "Arabe",
+    "french": "Français",
+    "defaultLanguage": "Langue par défaut"
+  }
+}
+

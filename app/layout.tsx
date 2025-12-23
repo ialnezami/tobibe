@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Providers } from "@/components/providers/SessionProvider";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import { AuthProvider } from "@/lib/auth/context";
+import LanguageWrapper from "@/components/LanguageWrapper";
 import Chatbot from "@/components/Chatbot";
 import "./globals.css";
 
@@ -15,13 +17,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <body>
         <Providers>
-          <AuthProvider>
-            {children}
-            <Chatbot />
-          </AuthProvider>
+          <LanguageProvider>
+            <LanguageWrapper>
+              <AuthProvider>
+                {children}
+                <Chatbot />
+              </AuthProvider>
+            </LanguageWrapper>
+          </LanguageProvider>
         </Providers>
       </body>
     </html>

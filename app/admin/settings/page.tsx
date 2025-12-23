@@ -1,20 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminSettingsPage() {
+  const { t } = useLanguage();
   const [saving, setSaving] = useState(false);
+  const [defaultLanguage, setDefaultLanguage] = useState("en");
 
-  const handleSave = async () => {
+  useEffect(() => {
+    fetchDefaultLanguage();
+  }, []);
+
+  const fetchDefaultLanguage = async () => {
+    try {
+      const response = await fetch("/api/admin/settings/default-language");
+      const data = await response.json();
+      if (response.ok) {
+        setDefaultLanguage(data.defaultLanguage || "en");
+      }
+    } catch (error) {
+      console.error("Error fetching default language:", error);
+    }
+  };
+
+  const handleSaveLanguage = async () => {
     setSaving(true);
-    // TODO: Implement settings save
-    setTimeout(() => {
-      alert("Settings saved successfully!");
+    try {
+      const response = await fetch("/api/admin/settings/default-language", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ defaultLanguage }),
+      });
+
+      if (response.ok) {
+        alert(t("common.success") + ": " + t("language.defaultLanguage") + " updated!");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to save");
+      }
+    } catch (error) {
+      console.error("Error saving default language:", error);
+      alert("Failed to save");
+    } finally {
       setSaving(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -27,6 +60,39 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="space-y-6">
+        {/* Language Settings */}
+        <Card>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">
+            🌐 {t("language.defaultLanguage")}
+          </h2>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                {t("language.select")}
+              </label>
+              <select
+                value={defaultLanguage}
+                onChange={(e) => setDefaultLanguage(e.target.value)}
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 text-base bg-white"
+              >
+                <option value="en">🇬🇧 {t("language.english")}</option>
+                <option value="ar">🇸🇦 {t("language.arabic")}</option>
+                <option value="fr">🇫🇷 {t("language.french")}</option>
+              </select>
+              <p className="text-xs text-slate-500 mt-2">
+                This will be the default language for new users
+              </p>
+            </div>
+            <Button
+              variant="primary"
+              onClick={handleSaveLanguage}
+              isLoading={saving}
+            >
+              {t("common.save")} {t("language.defaultLanguage")}
+            </Button>
+          </div>
+        </Card>
+
         {/* General Settings */}
         <Card>
           <h2 className="text-lg font-semibold text-slate-900 mb-4">

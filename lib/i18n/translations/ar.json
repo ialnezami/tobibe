@@ -1,0 +1,114 @@
+{
+  "common": {
+    "welcome": "مرحباً",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "register": "التسجيل",
+    "signUp": "إنشاء حساب",
+    "signIn": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "address": "العنوان",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "view": "عرض",
+    "back": "رجوع",
+    "next": "التالي",
+    "submit": "إرسال",
+    "search": "بحث",
+    "filter": "تصفية",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "dashboard": "لوحة التحكم",
+    "appointments": "المواعيد",
+    "bookings": "الحجوزات",
+    "doctors": "الأطباء",
+    "patients": "المرضى",
+    "services": "الخدمات",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "notifications": "الإشعارات"
+  },
+  "home": {
+    "title": "ابحث عن طبيبك المثالي",
+    "subtitle": "احجز مواعيد مع متخصصي الرعاية الصحية الموثوقين. سريع وسهل ومريح.",
+    "getStarted": "ابدأ الآن",
+    "browseDoctors": "تصفح الأطباء",
+    "searchPlaceholder": "ابحث بالاسم أو الموقع أو التخصص...",
+    "noDoctorsFound": "لم يتم العثور على أطباء",
+    "viewDetails": "عرض التفاصيل وحجز موعد",
+    "bookAppointment": "احجز موعد"
+  },
+  "auth": {
+    "loginTitle": "تسجيل الدخول إلى حسابك",
+    "registerTitle": "إنشاء حسابك",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "role": "الدور",
+    "customer": "عميل",
+    "doctor": "طبيب",
+    "admin": "مدير"
+  },
+  "booking": {
+    "title": "تفاصيل الحجز",
+    "doctor": "الطبيب",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "services": "الخدمات",
+    "payment": "الدفع",
+    "status": "الحالة",
+    "totalAmount": "المبلغ الإجمالي",
+    "cancelBooking": "إلغاء الحجز",
+    "backToBookings": "العودة إلى الحجوزات",
+    "notifyLate": "إشعار بأنني سأكون متأخراً",
+    "chatWithDoctor": "الدردشة مع الطبيب"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بعودتك!",
+    "totalAppointments": "إجمالي المواعيد",
+    "upcoming": "القادمة",
+    "past": "السابقة",
+    "favoriteDoctors": "الأطباء المفضلون",
+    "nextAppointment": "الموعد القادم",
+    "recentAppointments": "المواعيد الأخيرة"
+  },
+  "chat": {
+    "title": "الدردشة مع",
+    "unavailable": "الدردشة غير متاحة",
+    "unavailableMessage": "الدردشة متاحة فقط خلال فترات زمنية محددة:",
+    "oneHourBefore": "ساعة واحدة قبل الموعد",
+    "appointmentTime": "وقت الموعد",
+    "twentyFourHoursAfter": "24 ساعة بعد الموعد",
+    "typeMessage": "اكتب رسالتك...",
+    "send": "إرسال",
+    "noMessages": "لا توجد رسائل بعد. ابدأ المحادثة!"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "noNotifications": "لا توجد إشعارات بعد",
+    "markAsRead": "وضع علامة كمقروء",
+    "viewBooking": "عرض الحجز",
+    "unreadCount": "إشعار غير مقروء"
+  },
+  "language": {
+    "select": "اختر اللغة",
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+    "french": "الفرنسية",
+    "defaultLanguage": "اللغة الافتراضية"
+  }
+}
+

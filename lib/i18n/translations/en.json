@@ -1,0 +1,114 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "signUp": "Sign Up",
+    "signIn": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "appointments": "Appointments",
+    "bookings": "Bookings",
+    "doctors": "Doctors",
+    "patients": "Patients",
+    "services": "Services",
+    "profile": "Profile",
+    "settings": "Settings",
+    "notifications": "Notifications"
+  },
+  "home": {
+    "title": "Find Your Perfect Doctor",
+    "subtitle": "Book appointments with trusted healthcare professionals. Fast, easy, and convenient.",
+    "getStarted": "Get Started",
+    "browseDoctors": "Browse Doctors",
+    "searchPlaceholder": "Search by name, location, or specialty...",
+    "noDoctorsFound": "No doctors found",
+    "viewDetails": "View Details & Book Appointment",
+    "bookAppointment": "Book Appointment"
+  },
+  "auth": {
+    "loginTitle": "Login to Your Account",
+    "registerTitle": "Create Your Account",
+    "forgotPassword": "Forgot Password?",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "role": "Role",
+    "customer": "Customer",
+    "doctor": "Doctor",
+    "admin": "Admin"
+  },
+  "booking": {
+    "title": "Booking Details",
+    "doctor": "Doctor",
+    "date": "Date",
+    "time": "Time",
+    "services": "Services",
+    "payment": "Payment",
+    "status": "Status",
+    "totalAmount": "Total Amount",
+    "cancelBooking": "Cancel Booking",
+    "backToBookings": "Back to Bookings",
+    "notifyLate": "Notify I'm Running Late",
+    "chatWithDoctor": "Chat with Doctor"
+  },
+  "dashboard": {
+    "welcome": "Welcome back!",
+    "totalAppointments": "Total Appointments",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "favoriteDoctors": "Favorite Doctors",
+    "nextAppointment": "Next Appointment",
+    "recentAppointments": "Recent Appointments"
+  },
+  "chat": {
+    "title": "Chat with",
+    "unavailable": "Chat Unavailable",
+    "unavailableMessage": "Chat is only available during specific time windows:",
+    "oneHourBefore": "1 hour before appointment",
+    "appointmentTime": "Appointment time",
+    "twentyFourHoursAfter": "24 hours after appointment",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "noMessages": "No messages yet. Start the conversation!"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "No notifications yet",
+    "markAsRead": "Mark as Read",
+    "viewBooking": "View Booking",
+    "unreadCount": "unread notification"
+  },
+  "language": {
+    "select": "Select Language",
+    "english": "English",
+    "arabic": "Arabic",
+    "french": "French",
+    "defaultLanguage": "Default Language"
+  }
+}
+

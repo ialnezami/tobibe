@@ -34,6 +34,11 @@ const UserSchema = new Schema(
       required: true,
       default: "customer",
     },
+    language: {
+      type: String,
+      enum: ["en", "ar", "fr"],
+      default: "en",
+    },
   },
   {
     timestamps: true,
