@@ -30,3 +30,4 @@ FavoriteDoctorSchema.index({ patientId: 1, doctorId: 1 }, { unique: true });
 
 export default mongoose.models.FavoriteDoctor || model("FavoriteDoctor", FavoriteDoctorSchema);
 
+

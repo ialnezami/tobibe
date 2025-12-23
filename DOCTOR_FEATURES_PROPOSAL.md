@@ -269,3 +269,4 @@ app/doctor/
 6. **Add Financial Dashboard** - Revenue and payment tracking
 7. **Implement Analytics** - Reports and insights
 
+

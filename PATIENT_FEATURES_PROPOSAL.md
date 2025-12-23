@@ -246,3 +246,4 @@ app/patient/
 5. **Create Prescription Management** - Track medications
 6. **Add Health Reminders** - Appointment and medication reminders
 
+

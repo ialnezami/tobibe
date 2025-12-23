@@ -1,58 +1,54 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import Link from "next/link";
 
-interface User {
+interface DoctorProfile {
   _id: string;
   name: string;
   email: string;
   phone: string;
-  address?: string;
-  role: string;
-  createdAt: string;
+  description?: string;
+  location?: {
+    address: string;
+    coordinates: { lat: number; lng: number };
+  };
 }
 
-export default function EditUserPage() {
-  const params = useParams();
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+export default function DoctorProfilePage() {
+  const [profile, setProfile] = useState<DoctorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    description: "",
     address: "",
-    role: "customer",
-    password: "",
   });
 
   useEffect(() => {
-    fetchUser();
-  }, [params.id]);
+    fetchProfile();
+  }, []);
 
-  const fetchUser = async () => {
+  const fetchProfile = async () => {
     try {
-      const response = await fetch(`/api/admin/users/${params.id}`);
+      const response = await fetch("/api/doctors/profile");
       const data = await response.json();
       if (response.ok) {
-        setUser(data.user);
+        setProfile(data.doctor);
         setFormData({
-          name: data.user.name || "",
-          email: data.user.email || "",
-          phone: data.user.phone || "",
-          address: data.user.address || "",
-          role: data.user.role || "customer",
-          password: "",
+          name: data.doctor.name || "",
+          email: data.doctor.email || "",
+          phone: data.doctor.phone || "",
+          description: data.doctor.description || "",
+          address: data.doctor.location?.address || "",
         });
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
+      console.error("Error fetching profile:", error);
     } finally {
       setLoading(false);
     }
@@ -63,27 +59,28 @@ export default function EditUserPage() {
     setSaving(true);
 
     try {
-      const updateData = { ...formData };
-      if (!updateData.password) {
-        delete updateData.password;
-      }
-
-      const response = await fetch(`/api/admin/users/${params.id}`, {
+      const response = await fetch("/api/doctors/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          description: formData.description,
+          address: formData.address,
+        }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        alert("User updated successfully");
-        router.push("/admin/users");
+        alert("Profile updated successfully");
+        fetchProfile();
       } else {
-        alert(data.error || "Failed to update user");
+        alert(data.error || "Failed to update profile");
       }
     } catch (error) {
-      console.error("Error updating user:", error);
-      alert("Failed to update user");
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile");
     } finally {
       setSaving(false);
     }
@@ -95,7 +92,7 @@ export default function EditUserPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-teal-600 mx-auto mb-4"></div>
-            <p className="text-slate-600 text-sm font-medium">Loading user...</p>
+            <p className="text-slate-600 text-sm font-medium">Loading profile...</p>
           </div>
         </div>
       </div>
@@ -105,19 +102,16 @@ export default function EditUserPage() {
   return (
     <div className="p-6 lg:p-8">
       <div className="mb-6">
-        <Link href="/admin/users" className="text-teal-700 hover:text-teal-800 text-sm font-medium mb-4 inline-block">
-          ← Back to Users
-        </Link>
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Edit User
+          Profile Management
         </h1>
-        <p className="text-slate-600">Update user information</p>
+        <p className="text-slate-600">Update your professional profile</p>
       </div>
 
       <Card>
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Name"
+            label="Full Name"
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -140,44 +134,38 @@ export default function EditUserPage() {
             required
           />
 
-          <Input
-            label="Address"
-            type="text"
-            value={formData.address}
-            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          />
-
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Role
+              Description
             </label>
-            <select
-              value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 text-base bg-white"
-            >
-              <option value="customer">Customer</option>
-              <option value="doctor">Doctor</option>
-              <option value="admin">Admin</option>
-            </select>
+              rows={4}
+              placeholder="Describe your practice, specialties, and experience..."
+            />
           </div>
 
           <Input
-            label="New Password (leave blank to keep current)"
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            label="Practice Address"
+            type="text"
+            value={formData.address}
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            placeholder="123 Main St, City, State ZIP"
           />
 
           <div className="flex gap-3 pt-4">
             <Button type="submit" variant="primary" isLoading={saving}>
               Save Changes
             </Button>
-            <Link href="/admin/users">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => fetchProfile()}
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </Card>

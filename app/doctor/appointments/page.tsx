@@ -9,20 +9,21 @@ import { useSearchParams } from "next/navigation";
 
 interface Booking {
   _id: string;
-  doctorId: { name: string; email: string; phone: string; location?: { address: string } };
+  customerId: { name: string; email: string; phone: string };
   date: string;
   startTime: string;
   endTime: string;
   status: string;
+  serviceIds: string[];
   payment?: { amount: number; status: string; method: string };
   createdAt: string;
 }
 
-export default function PatientAppointmentsPage() {
+export default function DoctorAppointmentsPage() {
   const searchParams = useSearchParams();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<"all" | "upcoming" | "past" | "pending" | "confirmed" | "cancelled" | "completed">("all");
+  const [filter, setFilter] = useState<"all" | "upcoming" | "past" | "pending" | "confirmed" | "completed" | "cancelled">("all");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -33,15 +34,14 @@ export default function PatientAppointmentsPage() {
     fetchBookings();
   }, [filter, searchParams]);
 
+  useEffect(() => {
+    fetchBookings();
+  }, [search]);
+
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (filter !== "all") {
-        params.append("filter", filter);
-      }
-
-      const response = await fetch(`/api/bookings?${params}`);
+      const response = await fetch("/api/bookings");
       const data = await response.json();
       if (response.ok) {
         let filteredBookings = data.bookings || [];
@@ -50,8 +50,8 @@ export default function PatientAppointmentsPage() {
         if (search) {
           const searchLower = search.toLowerCase();
           filteredBookings = filteredBookings.filter((b: Booking) =>
-            b.doctorId.name.toLowerCase().includes(searchLower) ||
-            b.doctorId.email.toLowerCase().includes(searchLower)
+            b.customerId?.name?.toLowerCase().includes(searchLower) ||
+            b.customerId?.email?.toLowerCase().includes(searchLower)
           );
         }
 
@@ -64,17 +64,51 @@ export default function PatientAppointmentsPage() {
     }
   };
 
-  useEffect(() => {
-    fetchBookings();
-  }, [search]);
+  const updateStatus = async (bookingId: string, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/bookings/${bookingId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        fetchBookings();
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to update booking");
+      }
+    } catch (error) {
+      console.error("Error updating booking:", error);
+      alert("Failed to update booking");
+    }
+  };
+
+  const getFilteredBookings = () => {
+    const now = new Date();
+    return bookings.filter((booking) => {
+      const bookingDate = new Date(booking.date);
+      
+      if (filter === "upcoming") {
+        return bookingDate >= now && ["pending", "confirmed"].includes(booking.status);
+      }
+      if (filter === "past") {
+        return bookingDate < now;
+      }
+      if (filter === "pending" || filter === "confirmed" || filter === "completed" || filter === "cancelled") {
+        return booking.status === filter;
+      }
+      return true;
+    });
+  };
 
   return (
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          My Appointments
+          Appointments
         </h1>
-        <p className="text-slate-600">View and manage your appointments</p>
+        <p className="text-slate-600">Manage all your appointments</p>
       </div>
 
       {/* Filters */}
@@ -84,7 +118,7 @@ export default function PatientAppointmentsPage() {
             <Input
               label="Search Appointments"
               type="text"
-              placeholder="Search by doctor name..."
+              placeholder="Search by patient name or email..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -103,8 +137,8 @@ export default function PatientAppointmentsPage() {
               <option value="past">Past</option>
               <option value="pending">Pending</option>
               <option value="confirmed">Confirmed</option>
-              <option value="cancelled">Cancelled</option>
               <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
             </select>
           </div>
         </div>
@@ -120,31 +154,28 @@ export default function PatientAppointmentsPage() {
             </div>
           </div>
         </Card>
-      ) : bookings.length === 0 ? (
+      ) : getFilteredBookings().length === 0 ? (
         <Card>
           <div className="text-center py-12">
             <p className="text-slate-600 mb-4">No appointments found</p>
-            <Link href="/">
+            <Link href="/doctor/book-customer">
               <Button variant="primary">Book Appointment</Button>
             </Link>
           </div>
         </Card>
       ) : (
         <div className="space-y-4">
-          {bookings.map((booking) => (
+          {getFilteredBookings().map((booking) => (
             <Card key={booking._id} className="hover:shadow-md transition-shadow">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h3 className="text-lg font-semibold text-slate-900">
-                        {booking.doctorId.name}
+                        {booking.customerId?.name || "Unknown Patient"}
                       </h3>
-                      {booking.doctorId.location?.address && (
-                        <p className="text-sm text-slate-600 mt-1">
-                          📍 {booking.doctorId.location.address}
-                        </p>
-                      )}
+                      <p className="text-sm text-slate-600">{booking.customerId?.email}</p>
+                      <p className="text-xs text-slate-500">{booking.customerId?.phone}</p>
                     </div>
                     <span
                       className={`px-2 py-1 text-xs font-medium rounded ${
@@ -183,13 +214,39 @@ export default function PatientAppointmentsPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Link href={`/bookings/${booking._id}`}>
-                    <Button variant="primary">View Details</Button>
+                    <Button variant="outline" className="text-xs sm:text-sm">
+                      View Details
+                    </Button>
                   </Link>
-                  <Link href={`/doctors/${(booking.doctorId as any)._id}`}>
-                    <Button variant="outline">Doctor Profile</Button>
-                  </Link>
+                  {booking.status === "pending" && (
+                    <Button
+                      variant="primary"
+                      className="text-xs sm:text-sm"
+                      onClick={() => updateStatus(booking._id, "confirmed")}
+                    >
+                      Confirm
+                    </Button>
+                  )}
+                  {["pending", "confirmed"].includes(booking.status) && (
+                    <Button
+                      variant="outline"
+                      className="text-xs sm:text-sm text-red-600 hover:text-red-700 hover:border-red-300"
+                      onClick={() => updateStatus(booking._id, "cancelled")}
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                  {booking.status === "confirmed" && (
+                    <Button
+                      variant="primary"
+                      className="text-xs sm:text-sm"
+                      onClick={() => updateStatus(booking._id, "completed")}
+                    >
+                      Mark Completed
+                    </Button>
+                  )}
                 </div>
               </div>
             </Card>
