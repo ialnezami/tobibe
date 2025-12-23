@@ -59,8 +59,10 @@ export default function DoctorServicesPage() {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
-          price: parseFloat(formData.price),
+          name: formData.name,
+          description: formData.description,
+          price: formData.price, // API will handle conversion to cents
+          duration: formData.duration,
         }),
       });
 
@@ -136,7 +138,9 @@ export default function DoctorServicesPage() {
           <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
             Service Management
           </h1>
-          <p className="text-slate-600">Manage your services and pricing</p>
+          <p className="text-slate-600">
+            Create and manage your custom services. Patients can book these services when scheduling appointments.
+          </p>
         </div>
         <Button
           variant="primary"
@@ -146,7 +150,7 @@ export default function DoctorServicesPage() {
             setFormData({ name: "", description: "", price: "", duration: "" });
           }}
         >
-          {showAddForm ? "Cancel" : "+ Add Service"}
+          {showAddForm ? "Cancel" : "+ Create Custom Service"}
         </Button>
       </div>
 
@@ -157,35 +161,56 @@ export default function DoctorServicesPage() {
             {editingService ? "Edit Service" : "Add New Service"}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <Input
-              label="Service Name"
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-            />
-            <Input
-              label="Description"
-              type="text"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            />
-            <div className="grid grid-cols-2 gap-4">
+            <div>
               <Input
-                label="Price ($)"
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                label="Service Name *"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="e.g., General Consultation, Follow-up Visit, Specialized Treatment"
                 required
               />
-              <Input
-                label="Duration (minutes)"
-                type="number"
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                required
+              <p className="text-xs text-slate-500 mt-1">Choose a clear, descriptive name for your service</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Description
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-600"
+                rows={3}
+                placeholder="Describe what this service includes, what patients can expect, etc."
               />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Input
+                  label="Price ($) *"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  placeholder="0.00"
+                  required
+                />
+                <p className="text-xs text-slate-500 mt-1">Set the price for this service</p>
+              </div>
+              <div>
+                <Input
+                  label="Duration (minutes) *"
+                  type="number"
+                  min="5"
+                  step="5"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                  placeholder="30"
+                  required
+                />
+                <p className="text-xs text-slate-500 mt-1">How long does this service take?</p>
+              </div>
             </div>
             <div className="flex gap-3">
               <Button type="submit" variant="primary">
@@ -218,9 +243,13 @@ export default function DoctorServicesPage() {
           </div>
         ) : services.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-slate-600 mb-4">No services yet</p>
+            <div className="text-6xl mb-4">🩺</div>
+            <p className="text-slate-600 mb-2 text-lg font-medium">No services yet</p>
+            <p className="text-slate-500 text-sm mb-6">
+              Create custom services that patients can book. You can add services like consultations, checkups, or any specialized treatments.
+            </p>
             <Button variant="primary" onClick={() => setShowAddForm(true)}>
-              Add Your First Service
+              Create Your First Service
             </Button>
           </div>
         ) : (
