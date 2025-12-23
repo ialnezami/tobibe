@@ -48,15 +48,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md">
         <div className="text-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Sign In</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900">Sign In</h1>
+          <p className="mt-2 text-sm text-slate-600">
             Or{" "}
             <Link
               href="/register"
-              className="font-medium text-blue-600 hover:text-blue-500"
+              className="font-medium text-teal-700 hover:text-teal-800 transition-colors"
             >
               create a new account
             </Link>
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg shadow-sm">
               <p className="whitespace-pre-line">{error}</p>
               {error.includes("Database connection") && (
                 <div className="mt-3 pt-3 border-t border-red-200">
