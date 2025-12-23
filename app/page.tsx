@@ -84,6 +84,13 @@ export default function Home() {
                       </Button>
                     </Link>
                   )}
+                  {session.user.role === "admin" && (
+                    <Link href="/admin/dashboard">
+                      <Button variant="primary" className="text-xs px-2 py-1 hidden sm:inline-flex bg-teal-800 hover:bg-teal-900">
+                        Admin
+                      </Button>
+                    </Link>
+                  )}
                   <Link href="/api/auth/signout">
                     <Button variant="secondary" className="text-xs px-2 py-1">
                       Logout

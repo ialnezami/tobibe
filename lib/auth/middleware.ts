@@ -13,7 +13,7 @@ export async function requireAuth(request: NextRequest) {
   return null;
 }
 
-export async function requireRole(request: NextRequest, role: "doctor" | "customer") {
+export async function requireRole(request: NextRequest, role: "doctor" | "customer" | "admin") {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -23,6 +23,23 @@ export async function requireRole(request: NextRequest, role: "doctor" | "custom
   if (session.user.role !== role) {
     return NextResponse.json(
       { error: "Forbidden: Insufficient permissions" },
+      { status: 403 }
+    );
+  }
+
+  return null;
+}
+
+export async function requireAdmin(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (session.user.role !== "admin") {
+    return NextResponse.json(
+      { error: "Forbidden: Admin access required" },
       { status: 403 }
     );
   }
