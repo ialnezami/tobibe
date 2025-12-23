@@ -476,10 +476,17 @@ export default function DoctorDetailPage() {
                       <span className="text-slate-600">Total Time:</span>
                       <span className="font-medium">{calculateTotalTime()} minutes</span>
                     </div>
-                    <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t border-slate-200">
-                      <span>Total Price:</span>
-                      <span className="text-teal-700">${calculateTotalPrice()}</span>
-                    </div>
+                    {hasVisiblePrices() ? (
+                      <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t border-slate-200">
+                        <span>Total Price:</span>
+                        <span className="text-teal-700">${calculateTotalPrice()}</span>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t border-slate-200">
+                        <span>Price:</span>
+                        <span className="text-slate-500 italic">Available upon booking</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
