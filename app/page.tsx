@@ -72,11 +72,13 @@ export default function Home() {
             <div className="flex items-center gap-2">
               {session ? (
                 <>
-                  <Link href="/my-bookings">
-                    <Button variant="outline" className="text-xs px-2 py-1 hidden sm:inline-flex">
-                      My Bookings
-                    </Button>
-                  </Link>
+                  {session.user.role === "customer" && (
+                    <Link href="/patient/dashboard">
+                      <Button variant="outline" className="text-xs px-2 py-1 hidden sm:inline-flex">
+                        My Health
+                      </Button>
+                    </Link>
+                  )}
                   {session.user.role === "doctor" && (
                     <Link href="/doctor/dashboard">
                       <Button variant="primary" className="text-xs px-2 py-1 hidden sm:inline-flex">

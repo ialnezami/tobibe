@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -35,6 +36,7 @@ interface Service {
 export default function DoctorDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { data: session } = useSession();
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,13 +44,20 @@ export default function DoctorDetailPage() {
   const [availability, setAvailability] = useState<any[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [checkingFavorite, setCheckingFavorite] = useState(true);
 
   useEffect(() => {
     if (params.id) {
       fetchDoctorDetails();
       fetchServices();
+      if (session?.user?.role === "customer") {
+        checkFavorite();
+      } else {
+        setCheckingFavorite(false);
+      }
     }
-  }, [params.id]);
+  }, [params.id, session]);
 
   useEffect(() => {
     if (selectedDate && params.id) {
@@ -87,6 +96,53 @@ export default function DoctorDetailPage() {
       setAvailability(data.availability || []);
     } catch (error) {
       console.error("Error fetching availability:", error);
+    }
+  };
+
+  const checkFavorite = async () => {
+    try {
+      const response = await fetch("/api/patient/favorites");
+      const data = await response.json();
+      if (response.ok) {
+        const favorited = data.favorites?.some(
+          (fav: any) => fav.doctorId._id === params.id || fav.doctorId === params.id
+        );
+        setIsFavorite(favorited);
+      }
+    } catch (error) {
+      console.error("Error checking favorite:", error);
+    } finally {
+      setCheckingFavorite(false);
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!session?.user || session.user.role !== "customer") {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        const response = await fetch(`/api/patient/favorites?doctorId=${params.id}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          setIsFavorite(false);
+        }
+      } else {
+        const response = await fetch("/api/patient/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ doctorId: params.id }),
+        });
+        if (response.ok) {
+          setIsFavorite(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      alert("Failed to update favorite");
     }
   };
 
@@ -158,10 +214,10 @@ export default function DoctorDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-sm">Loading doctor details...</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-slate-300 border-t-teal-600 mx-auto mb-4"></div>
+          <p className="text-slate-600 text-sm font-medium">Loading doctor details...</p>
         </div>
       </div>
     );
@@ -169,9 +225,9 @@ export default function DoctorDetailPage() {
 
   if (!doctor) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
         <div className="text-center">
-          <p className="text-gray-600 text-base mb-4">Doctor not found</p>
+          <p className="text-slate-600 text-base mb-4">Doctor not found</p>
           <Link href="/">
             <Button variant="primary">Back to Home</Button>
           </Link>
@@ -181,11 +237,11 @@ export default function DoctorDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 sm:pb-4">
+    <div className="min-h-screen bg-slate-50 pb-20 sm:pb-4">
       <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6 lg:py-8">
         <Link
           href="/"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4 text-sm"
+          className="inline-flex items-center text-teal-700 hover:text-teal-800 mb-4 text-sm font-medium"
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -207,27 +263,27 @@ export default function DoctorDetailPage() {
           {/* Left Column - Doctor Info - Mobile First */}
           <div className="lg:col-span-1 order-2 lg:order-1">
             <Card className="sticky top-4">
-              <div className="h-48 sm:h-64 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mb-4 sm:mb-6 flex items-center justify-center -mx-6 -mt-6">
+              <div className="h-48 sm:h-64 bg-gradient-to-br from-teal-600 to-teal-700 rounded-xl mb-4 sm:mb-6 flex items-center justify-center -mx-6 -mt-6 shadow-sm">
                 <div className="text-white text-6xl sm:text-7xl font-bold">
                   {doctor.name.charAt(0)}
                 </div>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
+              <h1 className="text-2xl sm:text-3xl font-semibold text-slate-900 mb-3 sm:mb-4">
                 {doctor.name}
               </h1>
 
               {doctor.description && (
-                <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
+                <p className="text-slate-600 text-sm sm:text-base mb-4 sm:mb-6">
                   {doctor.description}
                 </p>
               )}
 
               {doctor.location?.address && (
                 <div className="mb-4 sm:mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
+                  <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">
                     Location
                   </h3>
-                  <div className="flex items-start text-gray-600 text-sm sm:text-base">
+                  <div className="flex items-start text-slate-600 text-sm sm:text-base">
                     <svg
                       className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0"
                       fill="none"
@@ -253,23 +309,46 @@ export default function DoctorDetailPage() {
               )}
 
               <div className="mb-4 sm:mb-6">
-                <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">Contact</h3>
-                <p className="text-gray-600 text-sm sm:text-base">{doctor.phone}</p>
-                <p className="text-gray-600 text-sm sm:text-base">{doctor.email}</p>
+                <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">Contact</h3>
+                <p className="text-slate-600 text-sm sm:text-base">{doctor.phone}</p>
+                <p className="text-slate-600 text-sm sm:text-base">{doctor.email}</p>
               </div>
+
+              {/* Add to Favorites Button - Only for patients */}
+              {session?.user?.role === "customer" && !checkingFavorite && (
+                <div className="pt-4 border-t border-slate-200">
+                  <Button
+                    variant={isFavorite ? "secondary" : "outline"}
+                    className="w-full"
+                    onClick={handleToggleFavorite}
+                  >
+                    {isFavorite ? (
+                      <>
+                        <span className="mr-2">⭐</span>
+                        Remove from Favorites
+                      </>
+                    ) : (
+                      <>
+                        <span className="mr-2">☆</span>
+                        Add to Favorites
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </Card>
           </div>
 
           {/* Right Column - Booking - Mobile First */}
           <div className="lg:col-span-2 order-1 lg:order-2">
             <Card>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 mb-4 sm:mb-6">
                 Book Appointment
               </h2>
 
               {/* Services Selection */}
               <div className="mb-4 sm:mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
                   Select Services
                 </h3>
                 <div className="space-y-2 sm:space-y-3">
@@ -278,31 +357,31 @@ export default function DoctorDetailPage() {
                       key={service._id}
                       className={`flex items-center p-3 sm:p-4 border-2 rounded-lg cursor-pointer transition-colors ${
                         selectedServices.includes(service._id)
-                          ? "border-blue-600 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? "border-teal-600 bg-teal-50"
+                          : "border-slate-200 hover:border-slate-300"
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={selectedServices.includes(service._id)}
                         onChange={() => handleServiceToggle(service._id)}
-                        className="mr-3 sm:mr-4 w-5 h-5 text-blue-600 flex-shrink-0"
+                        className="mr-3 sm:mr-4 w-5 h-5 text-teal-600 flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
                           <span className="font-medium text-gray-900 text-sm sm:text-base">
                             {service.name}
                           </span>
-                          <span className="text-blue-600 font-semibold text-sm sm:text-base">
+                          <span className="text-teal-700 font-semibold text-sm sm:text-base">
                             ${service.price}
                           </span>
                         </div>
                         {service.description && (
-                          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                          <p className="text-xs sm:text-sm text-slate-600 mt-1">
                             {service.description}
                           </p>
                         )}
-                        <p className="text-xs text-gray-500 mt-1">{service.duration} minutes</p>
+                        <p className="text-xs text-slate-500 mt-1">{service.duration} minutes</p>
                       </div>
                     </label>
                   ))}
@@ -311,7 +390,7 @@ export default function DoctorDetailPage() {
 
               {/* Date Selection - Mobile Optimized */}
               <div className="mb-4 sm:mb-6">
-                <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
                   Select Date
                 </h3>
                 <div className="grid grid-cols-7 gap-1 sm:gap-2 overflow-x-auto pb-2">
@@ -324,8 +403,8 @@ export default function DoctorDetailPage() {
                         onClick={() => setSelectedDate(date)}
                         className={`p-2 sm:p-3 rounded-lg border-2 transition-colors text-center ${
                           isSelected
-                            ? "border-blue-600 bg-blue-600 text-white"
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-teal-600 bg-teal-700 text-white"
+                            : "border-slate-200 hover:border-slate-300"
                         }`}
                       >
                         <div className="text-xs">{dateObj.toLocaleDateString("en-US", { weekday: "short" })}</div>
@@ -339,9 +418,9 @@ export default function DoctorDetailPage() {
               {/* Time Slot Selection - Mobile Optimized */}
               {selectedDate && (
                 <div className="mb-4 sm:mb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">
-                    Select Time
-                  </h3>
+                <h3 className="font-semibold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base">
+                  Select Time
+                </h3>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {availability
                       .filter((slot) => slot.isAvailable)
@@ -351,8 +430,8 @@ export default function DoctorDetailPage() {
                           onClick={() => setSelectedTimeSlot(slot.startTime)}
                           className={`p-2 sm:p-3 rounded-lg border-2 transition-colors text-sm sm:text-base ${
                             selectedTimeSlot === slot.startTime
-                              ? "border-blue-600 bg-blue-600 text-white"
-                              : "border-gray-200 hover:border-gray-300"
+                              ? "border-teal-600 bg-teal-700 text-white"
+                              : "border-slate-200 hover:border-slate-300"
                           }`}
                         >
                           {slot.startTime}
@@ -360,29 +439,29 @@ export default function DoctorDetailPage() {
                       ))}
                   </div>
                   {availability.filter((slot) => slot.isAvailable).length === 0 && (
-                    <p className="text-gray-500 text-sm">No available time slots for this date</p>
+                    <p className="text-slate-500 text-sm">No available time slots for this date</p>
                   )}
                 </div>
               )}
 
               {/* Summary - Mobile Optimized */}
               {selectedServices.length > 0 && (
-                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">
+                <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-slate-50 rounded-lg">
+                  <h3 className="font-semibold text-slate-900 mb-2 text-sm sm:text-base">
                     Booking Summary
                   </h3>
                   <div className="space-y-1 text-xs sm:text-sm">
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Services:</span>
+                      <span className="text-slate-600">Services:</span>
                       <span className="font-medium">{selectedServices.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Time:</span>
+                      <span className="text-slate-600">Total Time:</span>
                       <span className="font-medium">{calculateTotalTime()} minutes</span>
                     </div>
-                    <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t">
+                    <div className="flex justify-between text-base sm:text-lg font-bold pt-2 border-t border-slate-200">
                       <span>Total Price:</span>
-                      <span className="text-blue-600">${calculateTotalPrice()}</span>
+                      <span className="text-teal-700">${calculateTotalPrice()}</span>
                     </div>
                   </div>
                 </div>
