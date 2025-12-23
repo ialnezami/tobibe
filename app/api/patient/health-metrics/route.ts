@@ -28,11 +28,15 @@ export async function GET(request: NextRequest) {
       query.metricType = metricType;
     }
 
-    const metrics = await HealthMetric.find(query)
+    let queryBuilder = HealthMetric.find(query)
       .populate("doctorId", "name")
-      .sort({ recordedDate: -1 })
-      .limit(limit ? parseInt(limit) : undefined)
-      .lean();
+      .sort({ recordedDate: -1 });
+    
+    if (limit) {
+      queryBuilder = queryBuilder.limit(parseInt(limit));
+    }
+    
+    const metrics = await queryBuilder.lean();
 
     return NextResponse.json({ metrics });
   } catch (error: any) {

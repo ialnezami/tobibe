@@ -28,11 +28,15 @@ export async function GET(request: NextRequest) {
       query.documentType = documentType;
     }
 
-    const documents = await MedicalDocument.find(query)
+    let queryBuilder = MedicalDocument.find(query)
       .populate("doctorId", "name")
-      .sort({ documentDate: -1 })
-      .limit(limit ? parseInt(limit) : undefined)
-      .lean();
+      .sort({ documentDate: -1 });
+    
+    if (limit) {
+      queryBuilder = queryBuilder.limit(parseInt(limit));
+    }
+    
+    const documents = await queryBuilder.lean();
 
     return NextResponse.json({ documents });
   } catch (error: any) {
