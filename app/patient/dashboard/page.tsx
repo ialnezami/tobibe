@@ -44,16 +44,24 @@ export default function PatientDashboard() {
 
   useEffect(() => {
     fetchDashboard();
+    // Refresh every 30 seconds to keep data up to date
+    const interval = setInterval(() => {
+      fetchDashboard();
+    }, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const fetchDashboard = async () => {
     try {
-      const response = await fetch("/api/patient/dashboard");
+      // Add cache-busting timestamp to ensure fresh data
+      const response = await fetch(`/api/patient/dashboard?t=${Date.now()}`);
       const data = await response.json();
       if (response.ok) {
         setStats(data.stats);
         setNextAppointment(data.nextAppointment);
         setRecentBookings(data.recentBookings || []);
+      } else {
+        console.error("Dashboard fetch error:", data.error);
       }
     } catch (error) {
       console.error("Error fetching dashboard:", error);
@@ -116,11 +124,23 @@ export default function PatientDashboard() {
 
   return (
     <div className="p-6 lg:p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          My Health Dashboard
-        </h1>
-        <p className="text-slate-600">Welcome back! Here's your health overview</p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
+            My Health Dashboard
+          </h1>
+          <p className="text-slate-600">Welcome back! Here's your health overview</p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => {
+            setLoading(true);
+            fetchDashboard();
+          }}
+          className="text-sm"
+        >
+          🔄 Refresh
+        </Button>
       </div>
 
       {/* Statistics Cards */}

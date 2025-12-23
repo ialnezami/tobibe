@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db/connect";
 import Booking from "@/lib/models/Booking";
-import Doctor from "@/lib/models/Doctor";
+import FavoriteDoctor from "@/lib/models/FavoriteDoctor";
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,41 +20,76 @@ export async function GET(request: NextRequest) {
 
     const userId = session.user.id;
 
+    // Get current date/time for proper comparison
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const currentTimeStr = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+
     // Get patient statistics
     const [
       totalBookings,
-      upcomingBookings,
-      pastBookings,
+      allBookings,
       favoriteDoctorsCount,
-      nextAppointment,
       recentBookings,
     ] = await Promise.all([
       Booking.countDocuments({ customerId: userId }),
-      Booking.countDocuments({
-        customerId: userId,
-        status: { $in: ["pending", "confirmed"] },
-        date: { $gte: new Date() },
-      }),
-      Booking.countDocuments({
-        customerId: userId,
-        date: { $lt: new Date() },
-      }),
-      // For now, we'll count unique doctors the patient has booked with
-      Booking.distinct("doctorId", { customerId: userId }).then((ids) => ids.length),
-      Booking.findOne({
-        customerId: userId,
-        status: { $in: ["pending", "confirmed"] },
-        date: { $gte: new Date() },
-      })
+      // Get all bookings to calculate upcoming/past more accurately
+      Booking.find({ customerId: userId })
         .populate("doctorId", "name email phone location")
         .sort({ date: 1, startTime: 1 })
         .lean(),
+      // Count from FavoriteDoctor model
+      FavoriteDoctor.countDocuments({ patientId: userId }),
       Booking.find({ customerId: userId })
         .populate("doctorId", "name")
         .sort({ createdAt: -1 })
         .limit(5)
         .lean(),
     ]);
+
+    // Calculate upcoming and past bookings from the fetched data
+    let upcomingBookings = 0;
+    let pastBookings = 0;
+    let nextAppointment: any = null;
+
+    allBookings.forEach((booking: any) => {
+      // Handle date - it might be a Date object or ISO string
+      const bookingDate = booking.date instanceof Date 
+        ? booking.date 
+        : new Date(booking.date);
+      
+      const bookingDateOnly = new Date(
+        bookingDate.getFullYear(),
+        bookingDate.getMonth(),
+        bookingDate.getDate()
+      );
+      
+      const isToday = bookingDateOnly.getTime() === today.getTime();
+      const isFuture = bookingDateOnly > today;
+      const isPast = bookingDateOnly < today;
+      const isCompletedOrCancelled = 
+        booking.status === "completed" || booking.status === "cancelled";
+
+      // Check if booking is upcoming
+      const isUpcoming = 
+        !isCompletedOrCancelled &&
+        (isFuture || (isToday && booking.startTime >= currentTimeStr));
+
+      if (isUpcoming) {
+        upcomingBookings++;
+        // Find the next appointment (earliest upcoming)
+        if (
+          !nextAppointment ||
+          bookingDateOnly < new Date(nextAppointment.date) ||
+          (bookingDateOnly.getTime() === new Date(nextAppointment.date).getTime() &&
+            booking.startTime < nextAppointment.startTime)
+        ) {
+          nextAppointment = booking;
+        }
+      } else {
+        pastBookings++;
+      }
+    });
 
     return NextResponse.json({
       stats: {
