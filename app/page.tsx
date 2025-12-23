@@ -62,10 +62,11 @@ export default function Home() {
       const response = await fetch("/api/patient/favorites");
       const data = await response.json();
       if (response.ok && data.favorites) {
-        const ids = new Set(
-          data.favorites.map((fav: any) =>
-            typeof fav.doctorId === "object" ? fav.doctorId._id : fav.doctorId
-          )
+        const ids = new Set<string>(
+          data.favorites.map((fav: any) => {
+            const doctorId = typeof fav.doctorId === "object" ? fav.doctorId._id : fav.doctorId;
+            return String(doctorId);
+          })
         );
         setFavoriteIds(ids);
       }
