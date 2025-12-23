@@ -15,7 +15,6 @@ export default function RegisterPage() {
     phone: "",
     password: "",
     confirmPassword: "",
-    address: "",
     role: "customer" as "customer" | "doctor",
   });
   const [error, setError] = useState("");
@@ -57,7 +56,6 @@ export default function RegisterPage() {
           email: formData.email,
           phone: formData.phone,
           password: formData.password,
-          address: formData.address || undefined,
           role: formData.role,
         }),
       });
@@ -144,15 +142,6 @@ export default function RegisterPage() {
             onChange={handleChange}
             required
             autoComplete="tel"
-          />
-
-          <Input
-            label="Address (Optional)"
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            autoComplete="street-address"
           />
 
           <Input
