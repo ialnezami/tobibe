@@ -412,7 +412,11 @@ export default function BookCustomerPage() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-gray-900">{service.name}</span>
-                        <span className="text-blue-600 font-semibold">${service.price}</span>
+                        {(service as any).isPriceVisible !== false ? (
+                          <span className="text-blue-600 font-semibold">${service.price}</span>
+                        ) : (
+                          <span className="text-slate-500 italic text-sm">Price on request</span>
+                        )}
                       </div>
                       {service.description && (
                         <p className="text-sm text-gray-600 mt-1">{service.description}</p>

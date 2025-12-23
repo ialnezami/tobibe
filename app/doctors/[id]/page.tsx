@@ -164,8 +164,19 @@ export default function DoctorDetailPage() {
   const calculateTotalPrice = () => {
     return selectedServices.reduce((total, serviceId) => {
       const service = services.find((s) => s._id === serviceId);
-      return total + (service?.price || 0);
+      // Only include price if it's visible
+      if (service && (service as any).isPriceVisible !== false) {
+        return total + (service.price || 0);
+      }
+      return total;
     }, 0);
+  };
+
+  const hasVisiblePrices = () => {
+    return selectedServices.some((serviceId) => {
+      const service = services.find((s) => s._id === serviceId);
+      return service && (service as any).isPriceVisible !== false;
+    });
   };
 
   const handleBook = async () => {
@@ -372,9 +383,15 @@ export default function DoctorDetailPage() {
                           <span className="font-medium text-gray-900 text-sm sm:text-base">
                             {service.name}
                           </span>
-                          <span className="text-teal-700 font-semibold text-sm sm:text-base">
-                            ${service.price}
-                          </span>
+                          {(service as any).isPriceVisible !== false ? (
+                            <span className="text-teal-700 font-semibold text-sm sm:text-base">
+                              ${service.price}
+                            </span>
+                          ) : (
+                            <span className="text-slate-500 italic text-sm sm:text-base">
+                              Price on request
+                            </span>
+                          )}
                         </div>
                         {service.description && (
                           <p className="text-xs sm:text-sm text-slate-600 mt-1">

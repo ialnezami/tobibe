@@ -22,7 +22,7 @@ export async function PUT(
     await connectDB();
 
     const body = await request.json();
-    const { name, description, price, duration, isActive } = body;
+    const { name, description, price, duration, isActive, isPriceVisible } = body;
 
     const updateData: any = {};
     if (name) updateData.name = name;
@@ -30,6 +30,7 @@ export async function PUT(
     if (price) updateData.price = parseFloat(price) * 100; // Convert to cents
     if (duration) updateData.duration = parseInt(duration);
     if (isActive !== undefined) updateData.isActive = isActive;
+    if (isPriceVisible !== undefined) updateData.isPriceVisible = isPriceVisible;
 
     const service = await Service.findOneAndUpdate(
       { _id: id, doctorId: session.user.id },
