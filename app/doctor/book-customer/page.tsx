@@ -170,8 +170,19 @@ export default function BookCustomerPage() {
   const calculateTotalPrice = () => {
     return selectedServices.reduce((total, serviceId) => {
       const service = services.find((s) => s._id === serviceId);
-      return total + (service?.price || 0);
+      // Only include price if it's visible
+      if (service && (service as any).isPriceVisible !== false) {
+        return total + (service.price || 0);
+      }
+      return total;
     }, 0);
+  };
+
+  const hasVisiblePrices = () => {
+    return selectedServices.some((serviceId) => {
+      const service = services.find((s) => s._id === serviceId);
+      return service && (service as any).isPriceVisible !== false;
+    });
   };
 
   const handleBook = async () => {
@@ -500,8 +511,17 @@ export default function BookCustomerPage() {
                     <span className="font-medium">{calculateTotalTime()} minutes</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold pt-2 border-t">
-                    <span>Total Price:</span>
-                    <span className="text-blue-600">${calculateTotalPrice()}</span>
+                    {hasVisiblePrices() ? (
+                      <>
+                        <span>Total Price:</span>
+                        <span className="text-blue-600">${calculateTotalPrice()}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Price:</span>
+                        <span className="text-slate-500 italic">Available upon booking</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </Card>
