@@ -27,6 +27,7 @@ export default function DoctorServicesPage() {
     description: "",
     price: "",
     duration: "",
+    isPriceVisible: true,
   });
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function DoctorServicesPage() {
           description: formData.description,
           price: formData.price, // API will handle conversion to cents
           duration: formData.duration,
+          isPriceVisible: formData.isPriceVisible,
         }),
       });
 
@@ -71,7 +73,7 @@ export default function DoctorServicesPage() {
         alert(editingService ? "Service updated successfully" : "Service created successfully");
         setShowAddForm(false);
         setEditingService(null);
-        setFormData({ name: "", description: "", price: "", duration: "" });
+        setFormData({ name: "", description: "", price: "", duration: "", isPriceVisible: true });
         fetchServices();
       } else {
         alert(data.error || "Failed to save service");
@@ -89,6 +91,7 @@ export default function DoctorServicesPage() {
       description: service.description || "",
       price: (service.price / 100).toFixed(2),
       duration: service.duration.toString(),
+      isPriceVisible: (service as any).isPriceVisible !== false,
     });
     setShowAddForm(true);
   };
@@ -147,7 +150,7 @@ export default function DoctorServicesPage() {
           onClick={() => {
             setShowAddForm(!showAddForm);
             setEditingService(null);
-            setFormData({ name: "", description: "", price: "", duration: "" });
+            setFormData({ name: "", description: "", price: "", duration: "", isPriceVisible: true });
           }}
         >
           {showAddForm ? "Cancel" : "+ Create Custom Service"}
@@ -211,6 +214,20 @@ export default function DoctorServicesPage() {
                 />
                 <p className="text-xs text-slate-500 mt-1">How long does this service take?</p>
               </div>
+            </div>
+            <div>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formData.isPriceVisible}
+                  onChange={(e) => setFormData({ ...formData, isPriceVisible: e.target.checked })}
+                  className="rounded border-slate-300 text-teal-600 focus:ring-teal-500"
+                />
+                <span className="text-sm text-slate-700">Show price to patients</span>
+              </label>
+              <p className="text-xs text-slate-500 mt-1 ml-6">
+                Uncheck to hide the price from patients (they can still book the service)
+              </p>
             </div>
             <div className="flex gap-3">
               <Button type="submit" variant="primary">

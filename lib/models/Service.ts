@@ -32,6 +32,10 @@ const ServiceSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    isPriceVisible: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
