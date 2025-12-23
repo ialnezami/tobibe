@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
-    const { name, description, price, duration } = body;
+    const { name, description, price, duration, isPriceVisible } = body;
 
     if (!name || !price || !duration) {
       return NextResponse.json(
@@ -95,6 +95,7 @@ export async function POST(request: NextRequest) {
       price: parseFloat(price) * 100, // Convert to cents
       duration: parseInt(duration),
       isActive: true,
+      isPriceVisible: isPriceVisible !== undefined ? isPriceVisible : true,
     });
 
     await service.save();
