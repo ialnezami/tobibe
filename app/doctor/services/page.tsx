@@ -139,7 +139,7 @@ export default function DoctorServicesPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-            Service Management
+            🩺 Service Management
           </h1>
           <p className="text-slate-600">
             Create and manage your custom services. Patients can book these services when scheduling appointments.
@@ -153,7 +153,7 @@ export default function DoctorServicesPage() {
             setFormData({ name: "", description: "", price: "", duration: "", isPriceVisible: true });
           }}
         >
-          {showAddForm ? "Cancel" : "+ Create Custom Service"}
+          {showAddForm ? "❌ Cancel" : "➕ Create Custom Service"}
         </Button>
       </div>
 
@@ -161,7 +161,7 @@ export default function DoctorServicesPage() {
       {showAddForm && (
         <Card className="mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">
-            {editingService ? "Edit Service" : "Add New Service"}
+            {editingService ? "✏️ Edit Service" : "➕ Add New Service"}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -231,7 +231,7 @@ export default function DoctorServicesPage() {
             </div>
             <div className="flex gap-3">
               <Button type="submit" variant="primary">
-                {editingService ? "Update Service" : "Create Service"}
+                {editingService ? "💾 Update Service" : "✨ Create Service"}
               </Button>
               <Button
                 type="button"
@@ -242,7 +242,7 @@ export default function DoctorServicesPage() {
                   setFormData({ name: "", description: "", price: "", duration: "", isPriceVisible: true });
                 }}
               >
-                Cancel
+                ❌ Cancel
               </Button>
             </div>
           </form>
@@ -356,14 +356,14 @@ export default function DoctorServicesPage() {
                           className="text-xs px-2 py-1"
                           onClick={() => handleEdit(service)}
                         >
-                          Edit
+                          ✏️ Edit
                         </Button>
                         <Button
                           variant="outline"
                           className="text-xs px-2 py-1 text-red-600 hover:text-red-700 hover:border-red-300"
                           onClick={() => handleDelete(service._id, service.name)}
                         >
-                          Delete
+                          🗑️ Delete
                         </Button>
                       </div>
                     </td>

@@ -94,7 +94,7 @@ export default function DoctorAnalyticsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-            Analytics & Reports
+            📈 Analytics & Reports
           </h1>
           <p className="text-slate-600">View insights about your practice</p>
         </div>
@@ -114,11 +114,14 @@ export default function DoctorAnalyticsPage() {
 
       {/* Booking Analytics */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">Booking Analytics</h2>
+        <h2 className="text-xl font-semibold text-slate-900 mb-4">📅 Booking Analytics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Total Bookings</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">📅</span>
+                <p className="text-sm text-slate-600">Total Bookings</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 {analytics.bookingAnalytics.totalBookings}
               </p>
@@ -126,7 +129,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Completed</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">✅</span>
+                <p className="text-sm text-slate-600">Completed</p>
+              </div>
               <p className="text-2xl font-bold text-green-700">
                 {analytics.bookingAnalytics.completedBookings}
               </p>
@@ -134,7 +140,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Cancelled</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">❌</span>
+                <p className="text-sm text-slate-600">Cancelled</p>
+              </div>
               <p className="text-2xl font-bold text-red-700">
                 {analytics.bookingAnalytics.cancelledBookings}
               </p>
@@ -142,7 +151,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Cancellation Rate</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">📊</span>
+                <p className="text-sm text-slate-600">Cancellation Rate</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 {analytics.bookingAnalytics.cancellationRate.toFixed(1)}%
               </p>
@@ -152,7 +164,7 @@ export default function DoctorAnalyticsPage() {
 
         {/* Peak Hours */}
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">Peak Booking Hours</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">🕐 Peak Booking Hours</h3>
           {analytics.bookingAnalytics.peakHours.length > 0 ? (
             <div className="space-y-2">
               {analytics.bookingAnalytics.peakHours.map((hour, idx) => (
@@ -171,7 +183,7 @@ export default function DoctorAnalyticsPage() {
 
         {/* Popular Services */}
         <Card className="mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">Most Popular Services</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">⭐ Most Popular Services</h3>
           {analytics.bookingAnalytics.popularServices.length > 0 ? (
             <div className="space-y-2">
               {analytics.bookingAnalytics.popularServices.map((service, idx) => (
@@ -189,11 +201,14 @@ export default function DoctorAnalyticsPage() {
 
       {/* Patient Analytics */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">Patient Analytics</h2>
+        <h2 className="text-xl font-semibold text-slate-900 mb-4">👥 Patient Analytics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Total Patients</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">👥</span>
+                <p className="text-sm text-slate-600">Total Patients</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 {analytics.patientAnalytics.totalPatients}
               </p>
@@ -201,7 +216,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">New Patients</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">🆕</span>
+                <p className="text-sm text-slate-600">New Patients</p>
+              </div>
               <p className="text-2xl font-bold text-blue-700">
                 {analytics.patientAnalytics.newPatients}
               </p>
@@ -209,7 +227,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Returning</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">🔄</span>
+                <p className="text-sm text-slate-600">Returning</p>
+              </div>
               <p className="text-2xl font-bold text-green-700">
                 {analytics.patientAnalytics.returningPatients}
               </p>
@@ -217,7 +238,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Retention</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">💚</span>
+                <p className="text-sm text-slate-600">Retention</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 {analytics.patientAnalytics.patientRetention}
               </p>
@@ -225,7 +249,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Avg Visits/Patient</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">📊</span>
+                <p className="text-sm text-slate-600">Avg Visits/Patient</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 {analytics.patientAnalytics.averageVisitsPerPatient.toFixed(1)}
               </p>
@@ -236,11 +263,14 @@ export default function DoctorAnalyticsPage() {
 
       {/* Performance Metrics */}
       <div>
-        <h2 className="text-xl font-semibold text-slate-900 mb-4">Performance Metrics</h2>
+        <h2 className="text-xl font-semibold text-slate-900 mb-4">⚡ Performance Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Completion Rate</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">✅</span>
+                <p className="text-sm text-slate-600">Completion Rate</p>
+              </div>
               <p className="text-2xl font-bold text-green-700">
                 {analytics.performanceMetrics.completionRate.toFixed(1)}%
               </p>
@@ -248,7 +278,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Avg Appointment Value</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">💵</span>
+                <p className="text-sm text-slate-600">Avg Appointment Value</p>
+              </div>
               <p className="text-2xl font-bold text-slate-900">
                 ${(analytics.performanceMetrics.averageAppointmentValue / 100).toFixed(2)}
               </p>
@@ -256,7 +289,10 @@ export default function DoctorAnalyticsPage() {
           </Card>
           <Card>
             <div className="p-4">
-              <p className="text-sm text-slate-600 mb-1">Total Revenue</p>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xl">💰</span>
+                <p className="text-sm text-slate-600">Total Revenue</p>
+              </div>
               <p className="text-2xl font-bold text-teal-700">
                 ${(analytics.performanceMetrics.totalRevenue / 100).toFixed(2)}
               </p>
@@ -266,7 +302,7 @@ export default function DoctorAnalyticsPage() {
 
         {/* Revenue Trends */}
         <Card>
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">Revenue Trends</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">📈 Revenue Trends</h3>
           {analytics.performanceMetrics.revenueTrends.length > 0 ? (
             <div className="space-y-2">
               {analytics.performanceMetrics.revenueTrends.slice(-10).map((trend, idx) => (

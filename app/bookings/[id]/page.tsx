@@ -34,6 +34,7 @@ export default function BookingDetailPage() {
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [notifying, setNotifying] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -84,6 +85,16 @@ export default function BookingDetailPage() {
       });
 
       if (response.ok) {
+        // Send cancel notification
+        await fetch("/api/notifications/appointments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            bookingId: params.id,
+            type: "cancel",
+            message: "Appointment has been cancelled",
+          }),
+        });
         router.push("/my-bookings");
       } else {
         const data = await response.json();
@@ -94,6 +105,37 @@ export default function BookingDetailPage() {
       alert("Failed to cancel booking");
     } finally {
       setCancelling(false);
+    }
+  };
+
+  const handleNotifyLate = async () => {
+    if (!confirm("Notify the doctor that you will be late?")) {
+      return;
+    }
+
+    setNotifying(true);
+    try {
+      const response = await fetch("/api/notifications/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingId: params.id,
+          type: "late",
+          message: "Patient notified that they will be late for the appointment",
+        }),
+      });
+
+      if (response.ok) {
+        alert("Doctor has been notified that you will be late");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to send notification");
+      }
+    } catch (error) {
+      console.error("Error sending notification:", error);
+      alert("Failed to send notification");
+    } finally {
+      setNotifying(false);
     }
   };
 
@@ -228,16 +270,23 @@ export default function BookingDetailPage() {
                 {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
               </span>
             </div>
-            {canCancel && (
-              <Button
-                variant="secondary"
-                onClick={handleCancel}
-                isLoading={cancelling}
-                className="mt-4 sm:mt-0 w-full sm:w-auto"
-              >
-                Cancel Booking
-              </Button>
-            )}
+            <div className="flex flex-wrap gap-2 mt-4 sm:mt-0">
+              <Link href={`/chat/${params.id}`}>
+                <Button variant="primary" className="w-full sm:w-auto">
+                  💬 Chat with Doctor
+                </Button>
+              </Link>
+              {canCancel && (
+                <Button
+                  variant="secondary"
+                  onClick={handleCancel}
+                  isLoading={cancelling}
+                  className="w-full sm:w-auto"
+                >
+                  ❌ Cancel Booking
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Booking Information */}
@@ -410,23 +459,40 @@ export default function BookingDetailPage() {
               </div>
             </div>
 
+            {/* Quick Actions */}
+            {booking.status !== "cancelled" && booking.status !== "completed" && (
+              <div className="pt-4 border-t">
+                <h2 className="text-lg font-semibold text-slate-900 mb-3">Quick Actions</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={handleNotifyLate}
+                    isLoading={notifying}
+                    className="w-full"
+                  >
+                    ⏰ Notify I'm Running Late
+                  </Button>
+                  {canCancel && (
+                    <Button
+                      variant="secondary"
+                      onClick={handleCancel}
+                      isLoading={cancelling}
+                      className="w-full"
+                    >
+                      ❌ Cancel Appointment
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Actions */}
             <div className="pt-4 border-t flex flex-col sm:flex-row gap-3">
               <Link href="/my-bookings" className="flex-1">
                 <Button variant="outline" className="w-full">
-                  Back to Bookings
+                  ← Back to Bookings
                 </Button>
               </Link>
-              {canCancel && (
-                <Button
-                  variant="secondary"
-                  onClick={handleCancel}
-                  isLoading={cancelling}
-                  className="flex-1"
-                >
-                  Cancel Booking
-                </Button>
-              )}
             </div>
           </div>
         </Card>

@@ -47,7 +47,7 @@ export default function DoctorPatientsPage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          My Patients
+          👥 My Patients
         </h1>
         <p className="text-slate-600">Manage your patients and their booking history</p>
       </div>
@@ -74,7 +74,9 @@ export default function DoctorPatientsPage() {
           </div>
         ) : patients.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-slate-600">No patients found</p>
+            <div className="text-6xl mb-4">👤</div>
+            <p className="text-slate-600 mb-2">No patients found</p>
+            <p className="text-sm text-slate-500">Patients will appear here after they book appointments</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -136,7 +138,7 @@ export default function DoctorPatientsPage() {
                     <td className="py-3 px-4">
                       <Link href={`/doctor/patients/${patient._id}`}>
                         <Button variant="outline" className="text-xs px-2 py-1">
-                          View Details
+                          👁️ View Details
                         </Button>
                       </Link>
                     </td>

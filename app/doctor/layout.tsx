@@ -41,6 +41,7 @@ export default function DoctorLayout({
     { href: "/doctor/dashboard", label: "Dashboard", icon: "📊" },
     { href: "/doctor/appointments", label: "Appointments", icon: "📅" },
     { href: "/doctor/patients", label: "Patients", icon: "👥" },
+    { href: "/notifications", label: "Notifications", icon: "🔔" },
     { href: "/doctor/services", label: "Services", icon: "🩺" },
     { href: "/doctor/availability", label: "Availability", icon: "⏰" },
     { href: "/doctor/finances", label: "Finances", icon: "💰" },

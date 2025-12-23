@@ -103,7 +103,7 @@ export default function DoctorProfilePage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Profile Management
+          👤 Profile Management
         </h1>
         <p className="text-slate-600">Update your professional profile</p>
       </div>
@@ -157,14 +157,14 @@ export default function DoctorProfilePage() {
 
           <div className="flex gap-3 pt-4">
             <Button type="submit" variant="primary" isLoading={saving}>
-              Save Changes
+              💾 Save Changes
             </Button>
             <Button
               type="button"
               variant="outline"
               onClick={() => fetchProfile()}
             >
-              Cancel
+              ❌ Cancel
             </Button>
           </div>
         </form>

@@ -106,7 +106,7 @@ export default function DoctorAppointmentsPage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Appointments
+          📅 Appointments
         </h1>
         <p className="text-slate-600">Manage all your appointments</p>
       </div>
@@ -132,13 +132,13 @@ export default function DoctorAppointmentsPage() {
               onChange={(e) => setFilter(e.target.value as any)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 text-base bg-white"
             >
-              <option value="all">All Appointments</option>
-              <option value="upcoming">Upcoming</option>
-              <option value="past">Past</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="all">📋 All Appointments</option>
+              <option value="upcoming">⏭️ Upcoming</option>
+              <option value="past">📜 Past</option>
+              <option value="pending">⏳ Pending</option>
+              <option value="confirmed">✅ Confirmed</option>
+              <option value="completed">✔️ Completed</option>
+              <option value="cancelled">❌ Cancelled</option>
             </select>
           </div>
         </div>
@@ -157,9 +157,10 @@ export default function DoctorAppointmentsPage() {
       ) : getFilteredBookings().length === 0 ? (
         <Card>
           <div className="text-center py-12">
+            <div className="text-6xl mb-4">📭</div>
             <p className="text-slate-600 mb-4">No appointments found</p>
             <Link href="/doctor/book-customer">
-              <Button variant="primary">Book Appointment</Button>
+              <Button variant="primary">📝 Book Appointment</Button>
             </Link>
           </div>
         </Card>
@@ -190,12 +191,16 @@ export default function DoctorAppointmentsPage() {
                           : "bg-slate-100 text-slate-700"
                       }`}
                     >
+                      {booking.status === "confirmed" && "✅ "}
+                      {booking.status === "pending" && "⏳ "}
+                      {booking.status === "cancelled" && "❌ "}
+                      {booking.status === "completed" && "✔️ "}
                       {booking.status}
                     </span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-600">
                     <p>
-                      <span className="font-medium">Date:</span>{" "}
+                      <span className="font-medium">📅 Date:</span>{" "}
                       {new Date(booking.date).toLocaleDateString("en-US", {
                         weekday: "long",
                         year: "numeric",
@@ -204,11 +209,11 @@ export default function DoctorAppointmentsPage() {
                       })}
                     </p>
                     <p>
-                      <span className="font-medium">Time:</span> {booking.startTime} - {booking.endTime}
+                      <span className="font-medium">🕐 Time:</span> {booking.startTime} - {booking.endTime}
                     </p>
                     {booking.payment && (
                       <p>
-                        <span className="font-medium">Amount:</span> $
+                        <span className="font-medium">💰 Amount:</span> $
                         {(booking.payment.amount / 100).toFixed(2)} ({booking.payment.status})
                       </p>
                     )}
@@ -217,7 +222,7 @@ export default function DoctorAppointmentsPage() {
                 <div className="flex flex-wrap gap-2">
                   <Link href={`/bookings/${booking._id}`}>
                     <Button variant="outline" className="text-xs sm:text-sm">
-                      View Details
+                      👁️ View Details
                     </Button>
                   </Link>
                   {booking.status === "pending" && (
@@ -226,7 +231,7 @@ export default function DoctorAppointmentsPage() {
                       className="text-xs sm:text-sm"
                       onClick={() => updateStatus(booking._id, "confirmed")}
                     >
-                      Confirm
+                      ✅ Confirm
                     </Button>
                   )}
                   {["pending", "confirmed"].includes(booking.status) && (
@@ -235,7 +240,7 @@ export default function DoctorAppointmentsPage() {
                       className="text-xs sm:text-sm text-red-600 hover:text-red-700 hover:border-red-300"
                       onClick={() => updateStatus(booking._id, "cancelled")}
                     >
-                      Cancel
+                      ❌ Cancel
                     </Button>
                   )}
                   {booking.status === "confirmed" && (
@@ -244,7 +249,7 @@ export default function DoctorAppointmentsPage() {
                       className="text-xs sm:text-sm"
                       onClick={() => updateStatus(booking._id, "completed")}
                     >
-                      Mark Completed
+                      ✔️ Mark Completed
                     </Button>
                   )}
                 </div>

@@ -76,3 +76,27 @@ export interface Booking {
   updatedAt?: Date;
 }
 
+export interface ChatMessage {
+  _id?: string;
+  bookingId: string;
+  senderId: string;
+  receiverId: string;
+  message: string;
+  isRead: boolean;
+  readAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface AppointmentNotification {
+  _id?: string;
+  bookingId: string;
+  userId: string;
+  type: "late" | "cancel" | "reminder";
+  message: string;
+  isRead: boolean;
+  readAt?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+

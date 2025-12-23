@@ -124,7 +124,7 @@ export default function DoctorAvailabilityPage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Availability Management
+          ⏰ Availability Management
         </h1>
         <p className="text-slate-600">Set your working hours for each day of the week</p>
       </div>
@@ -179,7 +179,7 @@ export default function DoctorAvailabilityPage() {
 
           <div className="flex gap-3 pt-4 border-t border-slate-200">
             <Button type="submit" variant="primary" isLoading={saving}>
-              Save Working Hours
+              💾 Save Working Hours
             </Button>
             <Button
               type="button"
@@ -197,7 +197,7 @@ export default function DoctorAvailabilityPage() {
                 setWorkingHours(resetHours);
               }}
             >
-              Reset to Defaults
+              🔄 Reset to Defaults
             </Button>
           </div>
         </form>

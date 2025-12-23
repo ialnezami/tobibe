@@ -69,7 +69,7 @@ export default function DoctorFinancesPage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Financial Dashboard
+          💰 Financial Dashboard
         </h1>
         <p className="text-slate-600">Track your revenue and payments</p>
       </div>
@@ -96,19 +96,28 @@ export default function DoctorFinancesPage() {
       {/* Revenue Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <Card>
-          <p className="text-sm text-slate-600 mb-1">Total Revenue</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl">💰</span>
+            <p className="text-sm text-slate-600">Total Revenue</p>
+          </div>
           <p className="text-2xl font-semibold text-slate-900">
             ${(totalRevenue / 100).toFixed(2)}
           </p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-600 mb-1">Paid Revenue</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl">✅</span>
+            <p className="text-sm text-slate-600">Paid Revenue</p>
+          </div>
           <p className="text-2xl font-semibold text-green-700">
             ${(paidRevenue / 100).toFixed(2)}
           </p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-600 mb-1">Pending Payments</p>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xl">⏳</span>
+            <p className="text-sm text-slate-600">Pending Payments</p>
+          </div>
           <p className="text-2xl font-semibold text-orange-700">
             ${(pendingRevenue / 100).toFixed(2)}
           </p>
@@ -118,9 +127,12 @@ export default function DoctorFinancesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Payment Methods */}
         <Card>
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Payment Methods</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">💳 Payment Methods</h2>
           {paymentMethods.length === 0 ? (
-            <p className="text-slate-500 text-sm">No payment data available</p>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-2">💳</div>
+              <p className="text-slate-500 text-sm">No payment data available</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {paymentMethods.map((method) => (
@@ -145,9 +157,12 @@ export default function DoctorFinancesPage() {
 
         {/* Recent Payments */}
         <Card>
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Recent Payments</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">🕐 Recent Payments</h2>
           {recentPayments.length === 0 ? (
-            <p className="text-slate-500 text-sm">No recent payments</p>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-2">💵</div>
+              <p className="text-slate-500 text-sm">No recent payments</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {recentPayments.map((payment) => (

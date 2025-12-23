@@ -124,7 +124,7 @@ export default function DoctorDashboardPage() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-2">
-          Doctor Dashboard
+          👨‍⚕️ Doctor Dashboard
         </h1>
         <p className="text-slate-600">Overview of your practice</p>
       </div>
@@ -152,7 +152,7 @@ export default function DoctorDashboardPage() {
 
       {/* Quick Actions */}
       <Card className="mb-8">
-        <h2 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-slate-900 mb-4">⚡ Quick Actions</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           <Link href="/doctor/book-customer">
             <Button variant="primary" className="w-full justify-start">
@@ -180,12 +180,13 @@ export default function DoctorDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Today's Schedule */}
         <Card>
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Today's Schedule</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">📅 Today's Schedule</h2>
           {todayAppointments.length === 0 ? (
             <div className="text-center py-8">
+              <div className="text-4xl mb-3">📭</div>
               <p className="text-slate-500 text-sm mb-4">No appointments scheduled for today</p>
               <Link href="/doctor/book-customer">
-                <Button variant="outline">Book Appointment</Button>
+                <Button variant="outline">📝 Book Appointment</Button>
               </Link>
         </div>
           ) : (
@@ -230,9 +231,12 @@ export default function DoctorDashboardPage() {
 
         {/* Recent Bookings */}
         <Card>
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Recent Bookings</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">🕐 Recent Bookings</h2>
           {recentBookings.length === 0 ? (
-            <p className="text-slate-500 text-sm text-center py-8">No recent bookings</p>
+            <div className="text-center py-8">
+              <div className="text-4xl mb-3">📋</div>
+              <p className="text-slate-500 text-sm">No recent bookings</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {recentBookings.map((booking) => (
