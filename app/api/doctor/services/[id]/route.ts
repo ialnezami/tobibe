@@ -6,9 +6,10 @@ import Service from "@/lib/models/Service";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== "doctor") {
@@ -31,7 +32,7 @@ export async function PUT(
     if (isActive !== undefined) updateData.isActive = isActive;
 
     const service = await Service.findOneAndUpdate(
-      { _id: params.id, doctorId: session.user.id },
+      { _id: id, doctorId: session.user.id },
       updateData,
       { new: true, runValidators: true }
     );
@@ -55,9 +56,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== "doctor") {
@@ -70,7 +72,7 @@ export async function DELETE(
     await connectDB();
 
     const service = await Service.findOneAndDelete({
-      _id: params.id,
+      _id: id,
       doctorId: session.user.id,
     });
 
