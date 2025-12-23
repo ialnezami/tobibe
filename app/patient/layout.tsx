@@ -42,6 +42,8 @@ export default function PatientLayout({
     { href: "/patient/appointments", label: "My Appointments", icon: "📅" },
     { href: "/patient/favorites", label: "Favorite Doctors", icon: "⭐" },
     { href: "/patient/records", label: "Medical Records", icon: "📋" },
+    { href: "/patient/health-metrics", label: "Health Metrics", icon: "📊" },
+    { href: "/patient/documents", label: "Documents", icon: "📄" },
     { href: "/patient/prescriptions", label: "Prescriptions", icon: "💊" },
     { href: "/patient/reminders", label: "Reminders", icon: "🔔" },
     { href: "/patient/profile", label: "Health Profile", icon: "👤" },

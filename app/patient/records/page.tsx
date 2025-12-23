@@ -53,9 +53,11 @@ export default function PatientRecordsPage() {
           <p className="text-slate-600 text-sm mb-4">
             Track your vital signs and health measurements over time
           </p>
-          <Button variant="outline" className="w-full" disabled>
-            Coming Soon
-          </Button>
+          <Link href="/patient/health-metrics">
+            <Button variant="primary" className="w-full">
+              View Health Metrics
+            </Button>
+          </Link>
         </Card>
 
         {/* Medical Documents */}
@@ -66,9 +68,11 @@ export default function PatientRecordsPage() {
           <p className="text-slate-600 text-sm mb-4">
             Store and access your medical documents, lab results, and test reports
           </p>
-          <Button variant="outline" className="w-full" disabled>
-            Coming Soon
-          </Button>
+          <Link href="/patient/documents">
+            <Button variant="primary" className="w-full">
+              View Documents
+            </Button>
+          </Link>
         </Card>
       </div>
     </div>
