@@ -24,8 +24,9 @@ If you're seeing "Server error - There is a problem with the server configuratio
 
 #### `DATABASE_URL` or `MONGODB_URI`
 - **Purpose**: MongoDB connection string
-- **Format**: `mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority`
+- **Format**: `mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@<YOUR_CLUSTER>.mongodb.net/<YOUR_DATABASE>?retryWrites=true&w=majority`
 - **Where to get**: MongoDB Atlas → Connect → Connect your application
+- **⚠️ Important**: Replace `<YOUR_USERNAME>`, `<YOUR_PASSWORD>`, `<YOUR_CLUSTER>`, and `<YOUR_DATABASE>` with your actual values
 
 ### 2. **Optional (For Email Features)**
 
@@ -66,10 +67,16 @@ Click **"Add New"** and add each variable:
 - **Value**: Your MongoDB Atlas connection string
 - **Environment**: Production, Preview, Development (select all)
 
-**Example MongoDB Atlas Connection String:**
+**Example MongoDB Atlas Connection String Format:**
 ```
-mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/tobibe?retryWrites=true&w=majority
+mongodb+srv://<YOUR_USERNAME>:<YOUR_PASSWORD>@cluster0.xxxxx.mongodb.net/<YOUR_DATABASE>?retryWrites=true&w=majority
 ```
+
+**⚠️ Replace placeholders:**
+- `<YOUR_USERNAME>` - Your MongoDB Atlas database username
+- `<YOUR_PASSWORD>` - Your MongoDB Atlas database password (URL-encode special characters)
+- `cluster0.xxxxx` - Your actual cluster address from MongoDB Atlas
+- `<YOUR_DATABASE>` - Your database name (e.g., `tobibe`)
 
 ### Step 3: MongoDB Atlas Setup
 
