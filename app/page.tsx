@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/lib/i18n/context";
 import dynamic from "next/dynamic";
 
 // Dynamically import Map to avoid SSR issues
@@ -30,6 +32,7 @@ type ViewMode = "grid" | "list" | "map";
 export default function Home() {
   const { data: session } = useSession();
   const router = useRouter();
+  const { t } = useLanguage();
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -142,21 +145,21 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Find Your Perfect Doctor
+              {t("home.title")} 🩺
             </h1>
             <p className="text-lg sm:text-xl text-teal-50 mb-8 leading-relaxed">
-              Book appointments with trusted healthcare professionals. Fast, easy, and convenient.
+              {t("home.subtitle")}
             </p>
             {!session && (
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/register">
                   <Button variant="secondary" className="px-8 py-3 text-base font-semibold">
-                    Get Started
+                    {t("home.getStarted")} 👋
                   </Button>
                 </Link>
                 <Link href="/login">
                   <Button variant="outline" className="px-8 py-3 text-base font-semibold bg-white/10 border-white/30 text-white hover:bg-white/20">
-                    Sign In
+                    {t("common.signIn")} ➡️
                   </Button>
                 </Link>
               </div>
@@ -175,9 +178,10 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
-              <h2 className="text-xl font-semibold text-slate-900">Browse Doctors</h2>
+              <h2 className="text-xl font-semibold text-slate-900">{t("home.browseDoctors")} 🧑‍⚕️</h2>
             </div>
             <div className="flex items-center gap-3 flex-wrap">
+              <LanguageSwitcher />
               {session ? (
                 <>
                   {session.user.role === "customer" && (
@@ -234,7 +238,7 @@ export default function Home() {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by name, location, or specialty..."
+              placeholder={t("home.searchPlaceholder") + " 🔍"}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full px-4 py-3.5 pl-12 pr-4 border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500/20 focus:border-teal-600 text-base bg-white shadow-sm transition-all hover:border-slate-400"
