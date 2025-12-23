@@ -39,8 +39,7 @@ export default function AdminLayout({
 
   const menuItems = [
     { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
-    { href: "/admin/users", label: "Users", icon: "👥" },
-    { href: "/admin/doctors", label: "Doctors", icon: "👨‍⚕️" },
+    { href: "/admin/users", label: "Users & Doctors", icon: "👥" },
     { href: "/admin/bookings", label: "Bookings", icon: "📅" },
     { href: "/admin/settings", label: "Settings", icon: "⚙️" },
     { href: "/admin/reports", label: "Reports", icon: "📈" },
