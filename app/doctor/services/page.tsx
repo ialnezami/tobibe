@@ -239,7 +239,7 @@ export default function DoctorServicesPage() {
                 onClick={() => {
                   setShowAddForm(false);
                   setEditingService(null);
-                  setFormData({ name: "", description: "", price: "", duration: "" });
+                  setFormData({ name: "", description: "", price: "", duration: "", isPriceVisible: true });
                 }}
               >
                 Cancel
