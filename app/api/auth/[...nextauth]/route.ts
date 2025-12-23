@@ -4,6 +4,16 @@ import bcrypt from "bcryptjs";
 import connectDB from "@/lib/db/connect";
 import User from "@/lib/models/User";
 
+// Validate required environment variables
+if (!process.env.NEXTAUTH_SECRET) {
+  console.error("❌ NEXTAUTH_SECRET is missing! Please set it in your environment variables.");
+  console.error("Generate one with: openssl rand -base64 32");
+}
+
+if (!process.env.DATABASE_URL && !process.env.MONGODB_URI) {
+  console.error("❌ DATABASE_URL or MONGODB_URI is missing! Please set it in your environment variables.");
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -15,6 +25,19 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Please enter your email and password");
+        }
+
+        // Check for missing environment variables
+        if (!process.env.NEXTAUTH_SECRET) {
+          throw new Error(
+            "Server configuration error: NEXTAUTH_SECRET is missing. Please check VERCEL_ENV_SETUP.md for setup instructions."
+          );
+        }
+
+        if (!process.env.DATABASE_URL && !process.env.MONGODB_URI) {
+          throw new Error(
+            "Server configuration error: DATABASE_URL or MONGODB_URI is missing. Please check VERCEL_ENV_SETUP.md for setup instructions."
+          );
         }
 
         try {
@@ -29,6 +52,11 @@ export const authOptions: NextAuthOptions = {
           ) {
             throw new Error(
               "Database connection failed. Please check your MongoDB connection and ensure your IP address is whitelisted in MongoDB Atlas."
+            );
+          }
+          if (error?.message?.includes("DATABASE_URL") || error?.message?.includes("MONGODB_URI")) {
+            throw new Error(
+              "Database connection string is missing. Please set DATABASE_URL or MONGODB_URI in your environment variables."
             );
           }
           throw new Error("Database connection error. Please try again later.");
