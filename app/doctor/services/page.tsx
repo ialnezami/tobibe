@@ -315,9 +315,16 @@ export default function DoctorServicesPage() {
                       </p>
                     </td>
                     <td className="py-3 px-4">
-                      <p className="text-sm font-medium text-slate-900">
-                        ${(service.price / 100).toFixed(2)}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-slate-900">
+                          ${(service.price / 100).toFixed(2)}
+                        </p>
+                        {(service as any).isPriceVisible === false && (
+                          <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs">
+                            Hidden
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-4">
                       <p className="text-sm text-slate-600">{service.duration} min</p>
