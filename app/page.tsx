@@ -140,6 +140,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-teal-50/30">
+      {/* Quick Link to Landing Page */}
+      <div className="bg-teal-600 text-white text-center py-2 px-4">
+        <Link href="/landing" className="text-sm hover:underline">
+          🎉 Check out our new landing page →
+        </Link>
+      </div>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-teal-600 to-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
