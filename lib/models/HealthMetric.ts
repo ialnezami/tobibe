@@ -64,3 +64,4 @@ HealthMetricSchema.index({ patientId: 1, metricType: 1, recordedDate: -1 });
 
 export default mongoose.models.HealthMetric || model("HealthMetric", HealthMetricSchema);
 
+

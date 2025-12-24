@@ -94,3 +94,4 @@ PrescriptionSchema.index({ bookingId: 1 });
 
 export default mongoose.models.Prescription || model("Prescription", PrescriptionSchema);
 
+

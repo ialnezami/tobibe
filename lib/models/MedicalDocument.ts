@@ -70,3 +70,4 @@ MedicalDocumentSchema.index({ patientId: 1, documentType: 1 });
 
 export default mongoose.models.MedicalDocument || model("MedicalDocument", MedicalDocumentSchema);
 
+

@@ -80,3 +80,4 @@ ReminderSchema.index({ patientId: 1, isActive: 1 });
 
 export default mongoose.models.Reminder || model("Reminder", ReminderSchema);
 
+

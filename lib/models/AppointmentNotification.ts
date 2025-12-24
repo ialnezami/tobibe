@@ -41,3 +41,4 @@ AppointmentNotificationSchema.index({ bookingId: 1 });
 export default mongoose.models.AppointmentNotification ||
   model("AppointmentNotification", AppointmentNotificationSchema);
 
+

@@ -42,3 +42,4 @@ ChatMessageSchema.index({ receiverId: 1, isRead: 1 });
 
 export default mongoose.models.ChatMessage || model("ChatMessage", ChatMessageSchema);
 
+

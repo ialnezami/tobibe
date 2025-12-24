@@ -23,3 +23,4 @@ SystemSettingsSchema.index({ key: 1 });
 export default mongoose.models.SystemSettings ||
   model("SystemSettings", SystemSettingsSchema);
 
+

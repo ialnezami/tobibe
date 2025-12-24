@@ -187,3 +187,4 @@ All doctor routes are protected with:
 - Error handling is consistent across all endpoints
 
 
+
